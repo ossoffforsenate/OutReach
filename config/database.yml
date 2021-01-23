@@ -1,0 +1,60 @@
+---
+development: &default
+  primary:
+    adapter: postgresql
+    host: <%= ENV.fetch("DATABASE_HOST", "") %>
+    database: gotv_development
+    username: <%= ENV.fetch("DATABASE_USERNAME", "") %>
+    password: "<%= ENV.fetch("DATABASE_PASSWORD", "") %>"
+    encoding: utf8
+    min_messages: warning
+    pool: <%= Integer(ENV.fetch("DB_POOL", 5)) %>
+    reaping_frequency: <%= Integer(ENV.fetch("DB_REAPING_FREQUENCY", 10)) %>
+    timeout: 5000
+  primary_replica:
+    adapter: postgresql
+    host: <%= ENV.fetch("DATABASE_HOST", "") %>
+    database: gotv_development
+    username: <%= ENV.fetch("DATABASE_USERNAME", "") %>
+    password: "<%= ENV.fetch("DATABASE_PASSWORD", "") %>"
+    encoding: utf8
+    min_messages: warning
+    pool: <%= Integer(ENV.fetch("DB_POOL", 5)) %>
+    reaping_frequency: <%= Integer(ENV.fetch("DB_REAPING_FREQUENCY", 10)) %>
+    timeout: 5000
+    replica: true
+
+
+production:
+  primary:
+    encoding: unicode
+    min_messages: warning
+    pool: <%= [Integer(ENV.fetch("MAX_THREADS", 5)), Integer(ENV.fetch("DB_POOL", 5))].max %>
+    timeout: 5000
+    url: <%= ENV.fetch("DATABASE_URL", "") %>
+    adapter: postgresql
+  primary_replica:
+    encoding: unicode
+    min_messages: warning
+    pool: <%= [Integer(ENV.fetch("MAX_THREADS", 5)), Integer(ENV.fetch("DB_POOL", 5))].max %>
+    timeout: 5000
+    url: <%= ENV.fetch("DATABASE_URL", "") %>
+    adapter: postgresql
+    replica: true
+
+staging:
+  primary:
+    encoding: unicode
+    min_messages: warning
+    pool: <%= [Integer(ENV.fetch("MAX_THREADS", 5)), Integer(ENV.fetch("DB_POOL", 5))].max %>
+    timeout: 5000
+    url: <%= ENV.fetch("DATABASE_URL", "") %>
+    adapter: postgresql
+  primary_replica:
+    encoding: unicode
+    min_messages: warning
+    pool: <%= [Integer(ENV.fetch("MAX_THREADS", 5)), Integer(ENV.fetch("DB_POOL", 5))].max %>
+    url: <%= ENV.fetch("DATABASE_URL", "") %>
+    timeout: 5000
+    adapter: postgresql
+    replica: true

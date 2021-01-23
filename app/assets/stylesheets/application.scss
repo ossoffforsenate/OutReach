@@ -1,0 +1,274 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, or any plugin's
+ * vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any other CSS/SCSS
+ * files in this directory. Styles in this file should be added after the last require_* statement.
+ * It is generally better to create a new file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+@import "bulma";
+
+body.gotv-page {
+  font-family: 'Roboto', sans-serif;
+}
+section:last-of-type {
+  padding-bottom: 0;
+}
+.mini-info {
+  font-size: .75rem;
+  padding: .5em;
+}
+.login-page .mini-info {
+  font-size: 1rem;
+}
+.nowrap {
+  white-space: nowrap;
+}
+.gotv-page .title, .gotv-page .subtitle, .gotv-page h1, .gotv-page h2, .gotv-page h3, .gotv-page h4, .gotv-page h5, .gotv-page h6 {
+  font-family: 'Roboto Condensed', sans-serif;
+}
+.gotv-page .hero .title, .gotv-page .subtitle {
+  letter-spacing: .25rem;
+}
+.login-page .hero .subtitle, p.subtitle.stat-label{
+  letter-spacing: 0;
+}
+.hero #voter-phone {
+    letter-spacing: normal;
+}
+.gotv-page .button.is-primary {
+  background-color: #1b4388;
+  color: #fff;
+}
+
+/* TODO: set default bulma is-link color to #0BA3F1 */
+.is-link, .hero.is-link, .navbar.is-link {
+  background-color: #0BA3F1;
+}
+.hero-body .column {
+  padding-bottom: 0;
+}
+#slogan {
+  letter-spacing: .25rem;
+  color: #fff;
+}
+nav {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 1.5rem;
+}
+
+#logo {
+  width: 350px;
+  height: auto;
+  max-height: 100%;
+}
+
+#ossoff-photo {
+  /* TODO: resize and optimize photo */
+  background-image: image-url('ossoff_photo.png');
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 55%;
+  height: 100%;
+  background-position: right bottom;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+#countdown {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 6rem;
+  line-height: 1;
+  letter-spacing: .25rem;
+}
+
+form#login-form {
+  max-width: 350px;
+  font-size: 1.5rem;
+}
+form#login-form .label {
+  font-size: 1.5rem;
+}
+form#login-form .control.phone-number {
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 2.25rem;
+  font-weight: 700;
+}
+#login_input_underline {
+  border-bottom: 1px solid black;
+}
+form#login-form #control-wrapper {
+  border-bottom: 1px solid black;
+}
+form#login-form .country-code {
+  letter-spacing: 5px;
+  margin: 5px 0 0 5px;
+  color: #c2c2c2;
+}
+form#login-form #reach-logo {
+  width: 53px;
+  position: relative;
+  top: 15px;
+}
+ form#login-form .control.phone-number, form#login-form .input {
+    font-size: 2rem;
+  }
+  form input#phone_number {
+    width:225px;
+  }
+form#login-form .input {
+  border: 0;
+  box-shadow: none;
+  font-weight: 700;
+  padding: 0 0 0 .25em;
+}
+form#login-form .button {
+  background-color: #1b4388;
+  width: 200px;
+  height: 64px;
+  margin-top: 1rem;
+}
+form#login-form input {
+    background-color: transparent;
+}
+form#login-form #verification_code {
+  border-bottom: 1px solid gray;
+  max-width: 200px;
+  margin-right: 5em;
+}
+.gotv-page .table th {
+  border: none;
+}
+.box.user-stat {
+  max-width: 300px;
+  height: 115px;
+}
+.material-icons-outlined {
+  display: none;
+}
+.gotv-page .table th, .gotv-page .table td {
+  padding: 1em .75em;
+}
+tr.household-member td, tr.has-household-members td {
+  border: none;
+}
+tr.household-member.label td {
+  color: #777777;
+}
+
+#household-voter span, #voter-polling-place span {
+  -webkit-border-radius: 1rem;
+     -moz-border-radius: 1rem;
+      -ms-border-radius: 1rem;
+          border-radius: 1rem;
+  padding: 0.5rem;
+  display: inline-block;
+}
+
+#household-voter span {
+  padding: 1rem;
+  background-color: #39b6f6;
+  color: white;
+  font-size: 1rem;
+}
+#household-voter span a {
+  color: white;
+}
+canvas#confetti-canvas {
+  pointer-events: none;
+  z-index: 100;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+#video .modal-close {
+  background-color: red;
+  opacity: .8;
+}
+#video .modal-content {
+  max-height: unset;
+  width: 80%;
+}
+
+.fitVids-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+}
+.fitVids-wrapper iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+@media only screen and (max-width: 1024px) {
+  #ossoff-photo {
+    width: 40%;
+  }
+  .hero #user-name {
+    letter-spacing: .1rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #ossoff-photo {
+    display: none;
+  }
+  form#login-form .control.phone-number, form#login-form .input {
+    font-size: 2rem;
+  }
+  form input#phone_number {
+    width:225px;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  #slogan {
+    letter-spacing: .1rem;
+  }
+  nav {
+    font-size: 1.25rem;
+  }
+  #logo {
+    width: 280px;
+  }
+  .navbar-item {
+    padding-left: 0;
+  }
+  #countdown_intro {
+    font-size: 1.45rem;
+  }
+  #countdown {
+    font-size: 4rem;
+  }
+  #countdown_tagline {
+    font-size: 1.15rem;
+  }
+  #login-form-section {
+    padding-top: 1em;
+  }
+  form#login-form .control.phone-number, form#login-form .input {
+    font-size: 1.5rem;
+  }
+  form#login-form #reach-logo {
+    width: 40px;
+    position: relative;
+    top: 10px;
+  }
+  form input#phone_number {
+    width: 170px;
+  }
+}

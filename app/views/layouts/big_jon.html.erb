@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag 'application', media: 'all' %>
+    <%= javascript_pack_tag 'application' %>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ossoff 2020 - GOTV</title>
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap"
+      rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300;1,400;1,500;1,700;1,900&display=swap"
+      rel="stylesheet">
+  </head>
+
+
+  <body class="gotv-page login-page">
+    <div id="ossoff-photo"></div>
+
+    <section class="hero is-link">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand py-4 px-5">
+          <a class="navbar-item" href="/">
+            <img id="logo" src="<%= asset_path "logo.png" %>" alt="Ossoff Logo">
+          </a>
+        </div>
+      </nav>
+
+      <div class="hero-body countdown">
+        <div class="container">
+          <div class="columns is-centered is-mobile">
+            <div class="column is-half-tablet is-narrow-mobile">
+              <p id="countdown_intro" class="title has-text-weight-normal mb-0">
+                POLLS CLOSE 7PM TUESDAY!
+              </p>
+            </div>
+          </div>
+          <div class="columns is-centered is-mobile">
+            <div class="column is-half-tablet is-narrow-mobile">
+              <div id="countdown">
+                00:00:00
+              </div>
+            </div>
+          </div>
+          <div class="columns is-centered is-mobile">
+            <div class="column is-half-tablet is-narrow-mobile">
+              <p id="countdown_tagline" class="subtitle has-text-weight-normal">
+                There's still time to make a difference
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="login-form-section" class="section">
+      <div class="container">
+        <div class="columns is-centered">
+
+          <div class="column is-half-tablet is-narrow-mobile">
+            <div class="container mb-5 mt-3">
+              <% flash.each do |type, msg| %>
+                <div class="notification is-<%= type %>">
+                  <%= msg %>
+                </div>
+              <% end %>
+            </div>
+
+            <%= yield %>
+          </div>
+        </div>
+      </div>
+    </section>
+
+<script>
+function startTimer(duration) {
+}
+
+window.addEventListener('DOMContentLoaded', (event) => {
+  let now = Date.now();
+  let polls_close_time = new Date("2021-01-06T00:00:00.000+00:00").getTime();
+  let seconds_left = (polls_close_time - now)/1000;
+  startTimer(seconds_left);
+});
+</script>
+  </body>
+</html>

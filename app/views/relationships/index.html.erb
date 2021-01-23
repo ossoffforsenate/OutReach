@@ -1,0 +1,147 @@
+<section class="hero is-link">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-half-tablet is-narrow-mobile">
+          <p id="user-name" class="title is-size-1-desktop is-size-2-tablet is-size-3-mobile is-uppercase has-text-weight-normal mb-0">
+            Welcome, <%= current_user.first_name %>!
+          </p>
+        </div>
+      </div>
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-half-tablet is-narrow-mobile">
+          <a href="<%= voter_next_path %>" class="button is-primary is-link is-size-4-tablet is-size-6-mobile">Start Contacting Your Network</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="user-stats" class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column">
+        <p class="title">
+          Your Stats
+        </p>
+        <% if @tier_4_size > 0 %>
+          <span class="icon-text">
+            <span class="icon">
+              <i class="fas fa-info-circle"></i>
+            </span>
+            <span>This app excludes <%= pluralize @tier_4_size, "voter" %> who <%= @tier_4_size == 1 ? "is not a supporter or already voted" : "are unlikely supporters or already voted" %></span>
+          </span>
+        <% end %>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <div class="box user-stat">
+          <p class="title stat-value">
+            <%= @contacts.size %>
+          </p>
+          <p class="subtitle stat-label">
+            Direct contact<%= @contacts.size != 1 ? "s" : "" %>
+          </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="box user-stat">
+            <p class="title">
+              <%= @secondary_contacts.size %>
+            </p>
+            <p class="subtitle stat-label">
+            Household member<%= @secondary_contacts.size != 1 ? "s" : "" %> of contacts
+            </p>
+        </div>
+      </div>
+      <div class="column">
+        <div class="box user-stat">
+          <p class="title">
+            <%= @contacted_size %>
+          </p>
+          <p class="subtitle stat-label">
+            Voter<%= @contacted_size != 1 ? "s" : "" %> contacted
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contacts" class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column">
+        <p class="title mb-2">Your Contacts to Call</p>
+        <span class="mini-info has-text-info has-background-info-light">
+          Want to add more people to your network?
+          <a class="has-text-info has-text-weight-bold"
+            href="https://teamossoff.com/toolkit/guide-to-reach-and-relational-organizing">Learn more here</a>.
+        </span>
+      </div>
+    </div>
+    <div class="columns">
+      <div class="column">
+        <div class="box contacts">
+          <div class="table-container">
+            <table class="table is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Number</th>
+                  <th>Vote Status</th>
+                  <th class="has-text-centered">Voted in November</th>
+                  <th>Vote plan</th>
+                  <th>Call Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if @contacts.any? %>
+                  <% @contacts.each_with_index do |v, i| %>
+                    <tr class="<%= i == (@contacts.size - 1) ? "has-household-members" : "" %>">
+                      <td>
+                        <%= link_to v.display_name, voter_path(v) %>
+                      </td>
+                      <td class="nowrap"><%= v.phone_number_display %></td>
+                      <td><%= v.voting_status_display || "Unavailable" %></td>
+                      <td class="has-text-centered"><%= v.voted_general ? '✅' : '❌' %></td>
+                      <td><%= v.vote_plan || "Unavailable" %></td>
+                      <td><%= v.last_call_status_display %></td>
+                    </tr>
+                  <% end %>
+                <% else %>
+                  <tr class="has-text-centered is-light p-5">
+                    <td colspan="6">No contacts to show. Data may be 15-20 minutes delayed for recent Reach updates.</td>
+                  </tr>
+                <% end %>
+                <tr class="household-member label">
+                  <td colspan="6">Other voters in contacts' households:</td>
+                </tr>
+                <% if @secondary_contacts.any? %>
+                  <% @secondary_contacts.each_with_index do |v| %>
+                    <tr>
+                      <td>
+                        <%= link_to v.display_name, voter_path(v) %>
+                      </td>
+                      <td class="nowrap"><%= v.phone_number_display %></td>
+                      <td><%= v.voting_status_display || "Unavailable" %></td>
+                      <td class="has-text-centered"><%= v.voted_general ? '✅' : '❌' %></td>
+                      <td><%= v.vote_plan || "Unavailable" %></td>
+                      <td><%= v.last_call_status_display %></td>
+                    </tr>
+                  <% end %>
+                <% else %>
+                  <tr class="has-text-centered is-light p-5">
+                    <td colspan="6">No household members to show. Data may be 15-20 minutes delayed for recent Reach updates.</td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+

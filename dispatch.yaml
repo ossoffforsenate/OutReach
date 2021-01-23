@@ -1,0 +1,13 @@
+dispatch:
+  - url: "staging.ossoff-gotv.com/*"
+    service: gotv-staging
+  - url: "ossoff-gotv.com/*"
+    service: default
+  - url: "www.ossoff-gotv.com/*"
+    service: default
+  - url: "gotv.teamossoff.com/*"
+    service: default
+  - url: "ossoff-gotv.ue.r.appspot.com/*"
+    service: default
+  - url: "gotv-staging-dot-ossoff-gotv.ue.r.appspot.com/*"
+    service: gotv-staging

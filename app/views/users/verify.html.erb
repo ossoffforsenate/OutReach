@@ -1,0 +1,12 @@
+<%= form_tag verify_url, id: 'login-form' do %>
+  <div class="field phone-number">
+    <%= label_tag :verification_code, "Enter the verification code sent to #{current_user.phone_number_display}", class: 'label' %>
+    <div class="control level-item phone-number">
+      <%= text_field_tag :verification_code, nil, class: 'input'%>
+    </div>
+  </div>
+
+  <div class="control">
+    <%= submit_tag 'Verify', class: 'button is-link' %>
+  </div>
+<% end %>

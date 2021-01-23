@@ -1,0 +1,18 @@
+default: &default
+  question_id: "question-id"
+  id_prefix: "GA"
+  responses:
+    skip: "choice-id"
+    responded: "choice-id"
+    should_call_again: "choice-id"
+    do_not_call: "choice-id"
+    needs_a_ride: "choice-id"
+
+production:
+  <<: *default
+
+development:
+  <<: *default
+
+staging:
+  <<: *default

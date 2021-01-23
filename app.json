@@ -1,0 +1,29 @@
+{
+  "addons": [
+    {
+      "plan": "heroku-postgresql:hobby-dev"
+    },
+    {
+      "plan": "heroku-redis:hobby-dev"
+    }
+  ],
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    },
+    {
+      "url": "heroku/ruby"
+    }
+  ],
+  "scripts": {
+    "postdeploy": "bundle exec rails db:migrate db:seed"
+  },
+  "env": {
+    "HEROKU_APP_NAME": {
+        "required": true
+    },
+    "RAILS_ENV": {
+      "value": "staging"
+    }
+  }
+}

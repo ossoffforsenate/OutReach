@@ -1,0 +1,21 @@
+<%= form_tag '/login', id: 'login-form' do %>
+  <div class="field phone-number">
+    <%= label_tag :phone_number, 'Enter the mobile phone number used on your Reach account.', class: 'label mb-0' %>
+    <span class="mini-info has-text-info has-background-info-light">
+      New to Reach?
+      <a class="has-text-info has-text-weight-bold"
+        href="https://teamossoff.com/toolkit/guide-to-reach-and-relational-organizing">Learn more here</a>.
+    </span>
+    <div class="control phone-number">
+      <img id="reach-logo" src="<%= asset_path "reach_logo.png" %>">
+      <span id="login_input_underline">
+        <span class="country-code">+1</span>
+        <%= text_field_tag :phone_number, nil, placeholder: "555 555 5555", class: "input" %>
+      </span>
+    </div>
+  </div>
+
+  <div class="control">
+    <%= submit_tag "Login", class: "button is-large is-link", data: { 'disable-with' => 'Login' } %>
+  </div>
+<% end %>
