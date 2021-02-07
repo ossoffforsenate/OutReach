@@ -3,7 +3,7 @@
   <h1>OutReach: VPB for your Reach Contacts</h1>
 </div>
 
-OutReach is a tool to build a virtual phonebank ontop of your Reach.vote data. It was
+OutReach is a tool to build a virtual phonebank on top of your [Reach](https://www.reach.vote) data. It was
 prototyped quickly in the final week of the Ossoff 2020 GA Senate run-off, and
 is currently very tightly-coupled to the data pipeline for that campaign and
 untested.
