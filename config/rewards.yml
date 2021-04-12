@@ -1,17 +1,27 @@
-# display a warning message when a user records N skips
-skip_warnings:
-  - 3
-  - 10
-  - 25
-  - 50
-  - 100
-# videos thanking callers for making calls
-videos:
-  1: "youtube_video_id"
-  10: "youtube_video_id"
-  25: "youtube_video_id"
-  50: "youtube_video_id"
-  100: "youtube_video_id"
-messages:
-  success: "Thank you for making so many calls! Keep it up!"
-  first: "Congrats on making your first call! Keep it up!"
+default:
+  # display a warning message when a user records N skips
+  skip_warnings:
+    - 3
+    - 10
+    - 25
+    - 50
+    - 100
+  # videos thanking callers for making calls
+  videos:
+    1: "youtube_video_id"
+    10: "youtube_video_id"
+    25: "youtube_video_id"
+    50: "youtube_video_id"
+    100: "youtube_video_id"
+  messages:
+    success: "Thank you for making so many calls! Keep it up!"
+    first: "Congrats on making your first call! Keep it up!"
+
+production:
+  <<: *default
+
+development:
+  <<: *default
+
+staging:
+  <<: *default
