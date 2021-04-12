@@ -6,7 +6,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    @user = User.find_by(phone_number: "1234567890"))
+    @user = User.find_by(phone_number: "1234567890")
     if @user
       session[:user_id] = @user.id
       session[:is_verifying] = false
