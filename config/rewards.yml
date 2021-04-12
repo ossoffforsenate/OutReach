@@ -1,4 +1,4 @@
-default:
+default: &default
   # display a warning message when a user records N skips
   skip_warnings:
     - 3
