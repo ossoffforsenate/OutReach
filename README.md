@@ -8,6 +8,8 @@ prototyped quickly in the final week of the Ossoff 2020 GA Senate run-off, and
 is currently very tightly-coupled to the data pipeline for that campaign and
 untested.
 
+A public demo is available [here](https://outreach-vote-demo.herokuapp.com/).
+
 For now, this repo is just provided for reference and to fork for
 future campaigns. In the future, it can be abstracted to support any campaign
 using Reach.
