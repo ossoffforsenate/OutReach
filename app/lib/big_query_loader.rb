@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+=begin
 require "google/cloud/bigquery"
 require "logger"
 
@@ -134,3 +135,4 @@ class BigQueryLoader
     !failed
   end
 end
+=end
