@@ -2,7 +2,7 @@
 
 class VoterController < ApplicationController
   SKIP_WARN_THRESHOLDS = Set.new(Rails.configuration.rewards.skip_warnings)
-  SUCCESS_THRESHOLDS   = Set.new(Rails.configuration.rewards.videos.keys)
+  SUCCESS_THRESHOLDS   = Set.new([])
 
   before_action :authorize_and_set_contact, only: [:show, :update]
   before_action :migrate_voters_seen, only: [:next, :show]
