@@ -30,6 +30,5 @@ module Gotv
     config.skylight.environments << "staging"
     config.reach    = config_for(:reach)
     config.rewards  = config_for(:rewards)
-    config.bigquery = config_for(:bigquery)
   end
 end
