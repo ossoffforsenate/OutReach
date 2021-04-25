@@ -10,13 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_04_172112) do
+ActiveRecord::Schema.define(version: 2021_04_24_224753) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "relationships", force: :cascade do |t|
-    t.integer "voter_sos_id"
+    t.bigint "voter_sos_id"
     t.string "user_id"
     t.string "relationship"
     t.datetime "created_at", precision: 6, null: false
@@ -39,7 +39,7 @@ ActiveRecord::Schema.define(version: 2021_01_04_172112) do
     t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
   end
 
-  create_table "voters", primary_key: "sos_id", id: :serial, force: :cascade do |t|
+  create_table "voters", primary_key: "sos_id", force: :cascade do |t|
     t.string "last_name"
     t.string "first_name"
     t.string "middle_name"

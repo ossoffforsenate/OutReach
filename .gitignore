@@ -31,5 +31,3 @@ yarn-debug.log*
 app.yaml
 app.staging.yaml
 .env
-
-config/reach.yml

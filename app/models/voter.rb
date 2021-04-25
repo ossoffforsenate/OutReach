@@ -36,7 +36,11 @@ class Voter < ApplicationRecord
   end
 
   def voting_status_display
-    VOTE_STATUS_TEXT.fetch(voting_status.downcase, voting_status) || "Unknown"
+    if voting_status.present?
+      VOTE_STATUS_TEXT.fetch(voting_status.downcase, voting_status) || "Unknown"
+    else
+      "Unknown"
+    end
   end
 
   def phone_number_display
@@ -44,10 +48,18 @@ class Voter < ApplicationRecord
   end
 
   def display_name
-    "#{first_name.capitalize} #{last_name.capitalize}"
+    if first_name.present? && last_name.present?
+      "#{first_name.capitalize} #{last_name.capitalize}"
+    else
+      "#{first_name} #{last_name}"
+    end
   end
 
   def household_members
-    Voter.where(household_id: household_id).where.not(sos_id: sos_id)
+    if household_id.present?
+      Voter.where(household_id: household_id).where.not(sos_id: sos_id)
+    else
+      Voter.none
+    end
   end
 end

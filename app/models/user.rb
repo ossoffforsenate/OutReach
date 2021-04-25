@@ -19,7 +19,8 @@ class User < ApplicationRecord
   end
 
   def non_self_voters
-    Voter.where(sos_id: Relationship.where(user_id: id).where.not(relationship: 'Me').select(:voter_sos_id))
+    # TODO: Exclude self
+    Voter.where(sos_id: Relationship.where(user_id: id).select(:voter_sos_id))
   end
 
   def secondary_network
@@ -78,20 +79,17 @@ class User < ApplicationRecord
   end
 
   def relationship_call_list
+    # TODO: Exclude self
     Voter.
-      where(sos_id: Relationship.where(user_id: id).where.not(relationship: 'Me').select(:voter_sos_id)).
-      order(:tier, :sos_id).
-      where(last_call_status: [:not_yet_called, :should_call_again]).
-      where.
-      not(tier: 4)
+      where(sos_id: Relationship.where(user_id: id).select(:voter_sos_id)).
+      order(:sos_id).
+      where(last_call_status: [:not_yet_called, :should_call_again])
   end
 
   def household_member_call_list
     secondary_network.
-      order(:tier, :sos_id).
+      order(:sos_id).
       where(last_call_status: [:not_yet_called, :should_call_again]).
-      where.
-      not(tier: 4).
       where.
       not(sos_id: relationship_call_list.select(:sos_id))
   end
