@@ -17,7 +17,7 @@ class VoterController < ApplicationController
     next_voter = call_list.find { |v| !voters_seen[v.sos_id.to_s] }
 
     if params[:skip] && voter
-      record_in_reach(Rails.configuration.reach.responses.skip)
+      record_in_reach(Rails.configuration.reach.responses[:skip])
       current_user.log_skip!
 
       if SKIP_WARN_THRESHOLDS.include?(current_user.skips_logged)
@@ -64,7 +64,7 @@ class VoterController < ApplicationController
       end
     elsif params[:is_needs_a_ride_form]
       needs_a_ride = params[:needs_a_ride] == "1"
-      record_in_reach(Rails.configuration.reach.responses.needs_a_ride) if needs_a_ride
+      record_in_reach(Rails.configuration.reach.responses[:needs_a_ride]) if needs_a_ride
       voter.update(needs_a_ride: needs_a_ride)
     end
   end
