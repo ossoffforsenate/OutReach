@@ -1,15 +1,15 @@
 # frozen_string_literal: true
-=begin
-require "google/cloud/bigquery"
-require "logger"
+# require "google/cloud/bigquery"
+# require "logger"
 
 my_logger = Logger.new $stderr
 my_logger.level = Logger::ERROR
 
 # Set the Google API Client logger
-Google::Apis.logger = my_logger
+# Google::Apis.logger = my_logger
 
 class BigQueryLoader
+=begin
   BIGQUERY_CLIENT = Google::Cloud::Bigquery.new
   RELATIONS_QUERY = Rails.configuration.bigquery.relations_query
   USERS_QUERY     = Rails.configuration.bigquery.users_query
@@ -134,5 +134,5 @@ class BigQueryLoader
 
     !failed
   end
-end
 =end
+end
