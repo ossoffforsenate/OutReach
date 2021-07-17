@@ -44,7 +44,7 @@ class VoterController < ApplicationController
     if params[:last_call_status]
       current_user.log_call!
       if voter.update(last_call_status: params[:last_call_status])
-        record_in_reach(Rails.configuration.responses.to_h.fetch(params[:last_call_status].to_s))
+        record_in_reach(Rails.configuration.reach.responses.to_h.fetch(params[:last_call_status].to_sym))
         calls_logged = current_user.calls_logged
         if Rails.configuration.rewards.videos.key?(calls_logged.to_s)
           flash[:success] = Rails.configuration.rewards.messages.success
