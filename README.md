@@ -18,6 +18,34 @@ using Reach.
 effort spent on this will depend on interest from other campaigns. If you're
 interested in using this, please email me at benmuschol@gmail.com**
 
+## Current State
+
+The current state of the codebase is not totally usable by other campaigns,
+though it could be with some adjustment. For the most part, the functionality
+here is meant to be a UX improvement ontop of reach for relational
+phone/textbanking events, so you may have better luck simply using reach on its
+own rather than trying to deploy outreach.
+
+That said, to set it up for another campaign, the work should focus around:
+ - Graphics: The homepage features a photo of Jon Ossoff which should be rotated
+   in favor of a photo of your candidate
+ - Data pipeline: The data pipeline is currently tightly-coupled to the Ossoff
+   campaign's data. Though most of the data is essentially directly from the
+   Reach API, it was imported via BigQuery, so there is no implementation to
+   load data from Reach directly. Additionally, some data around voter scores or
+   polling places was loaded from non-Reach data pipelines. The codebase should
+   be modified to work with null values in that instance or import them through
+   some other source.
+
+The app comes with fake data to use and play around with for development
+purposes so you can set it up without this data pipeline for testing, but it
+will take effort to use it in production.
+
+## Tech Stack / Dependencies
+
+In addition to the BigQuery dependency mentioned above, you will need to set up
+the Twilio API for login.
+
 ## Getting Started
 
 After you have cloned this repo, run this setup script to set up your machine
