@@ -52,10 +52,6 @@ gem "faker", "~> 2.15"
 
 gem "bulma-rails", "~> 0.9.1"
 
-gem "appengine", "~> 0.6.0"
-
-gem "google-cloud-bigquery", "~> 1.25"
-
 gem "irb", "~> 1.3"
 
 gem "skylight", "~> 4.3"
