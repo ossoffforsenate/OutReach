@@ -65,6 +65,7 @@ class ReachCsvLoader
       to_upsert << {
         user_id: row["User ID"],
         voter_reach_id: row["Reach ID"],
+        relationship: row["Relationship Type"],
         created_at: Time.now,
         updated_at: Time.now,
       }
