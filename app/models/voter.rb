@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-
+# Ask about the inheritance here
 class Voter < ApplicationRecord
   self.primary_key = :reach_id
 
@@ -16,9 +16,17 @@ class Voter < ApplicationRecord
     do_not_call: "Don't call back",
   }.freeze
 
+  # What's going on with this mapping? where is it getting the vote status from? GA SOS?
   VOTE_STATUS_TEXT = {
     "ballot mailed" => "Needs to Return Ballot",
     "ballot received" => "Has Voted!",
+  }.freeze
+
+  VOTER_REGISTRATION_STATUS_TEXT = {
+    registered_in_district: "Registered in PA HD 82",
+    registered_in_state: "Registered in PA",
+    registereted_out_of_state: "Registered out of state",
+    unregistered: "Unregistered"
   }.freeze
 
   def last_call_status_display
@@ -27,6 +35,10 @@ class Voter < ApplicationRecord
 
   def polling_place_display
     nil # TODO: implement voting location search if possible
+  end
+
+  def voter_registration_status_display
+    VOTER_REGISTRATION_STATUS_TEXT.fetch(voter_registration_status.to_sym, voter_registration_status) || "Unknown"
   end
 
   def voting_status_display
