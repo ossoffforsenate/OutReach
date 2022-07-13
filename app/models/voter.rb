@@ -38,7 +38,8 @@ class Voter < ApplicationRecord
   end
 
   def voter_registration_status_display
-    VOTER_REGISTRATION_STATUS_TEXT.fetch(voter_registration_status.to_sym, voter_registration_status) || "Unknown"
+    return "Unknown" unless voter_registration_status
+    VOTER_REGISTRATION_STATUS_TEXT[voter_registration_status.to_sym]
   end
 
   def voting_status_display
