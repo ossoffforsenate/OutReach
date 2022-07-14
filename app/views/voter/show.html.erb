@@ -1,17 +1,6 @@
 <section class="hero is-link">
   <div class="hero-body">
     <div class="container">
-      <% if @same_household_voter %>
-        <div id="household-voter" class="columns is-centered has-text-centered">
-          <div class="column is-narrow">
-            <span class="box has-text-white mini-info is-rounded">
-              <a id="household-badge" href="<%= voter_path @same_household_voter %>">
-                🏡&nbsp;<b><%= @same_household_voter.display_name %></b>'s household member
-              </a>
-            </span>
-          </div>
-        </div>
-      <% end %>
       <div class="columns is-centered has-text-centered">
         <div class="column is-half-tablet is-narrow-mobile">
           <p id="voter-name" class="title is-uppercase is-1 has-text-weight-normal mb-0">
@@ -26,13 +15,10 @@
       </div>
       <div id="voter-facts" class="columns is-centered has-text-centered mt-4">
         <div class="column is-narrow">
-          📆 Vote Status: <%= @voter.voting_status_display || "Unavailable" %>
+          📆 Vote Status: <%= @voter.voting_status ? @voter.voting_status_display : "Unavailable" %>
         </div>
         <div class="column is-narrow">
           📝 Plan: <%= @voter.vote_plan || "Unavailable" %>
-        </div>
-        <div class="column is-narrow">
-          🗳 Voted in general election: <%= @voter.voted_general ? 'Yes' : 'No'  %>
         </div>
       </div>
       <% if @voter.polling_place_display %>
@@ -51,15 +37,6 @@
 <section id="contact-actions" class="section">
   <div class="container">
     <div class="columns is-multiline is-centered is-mobile">
-      <div class="column is-narrow">
-        <div class="button is-medium is-light">
-          <%= form_with url: voter_path(@voter), method: :patch do |f| %>
-            <%= hidden_field_tag :is_needs_a_ride_form, true %>
-            <%= check_box_tag :needs_a_ride, "1", @voter.needs_a_ride, onChange: "this.form.submit()" %>
-            <%= label_tag :needs_a_ride, "#{@voter.first_name.capitalize} needs a ride to the polls" %>
-          <% end %>
-        </div>
-      </div>
       <div class="column is-narrow">
         <%= form_tag voter_path(@voter), method: :patch do %>
           <%= hidden_field_tag :last_call_status, "should_call_again" %>
@@ -165,56 +142,6 @@
               <p>ACCEESSIBLE VOTER TEXTLINE: <a href="tel:833-566-1212">833-566-1212</a></p>
               <p>VOTER FAQ: <a href="http://electjon.com/faq " target="_blank">electjon.com/faq</a></p>
             </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="column column is-full-tablet is-half-desktop">
-        <div id="household" class="columns">
-          <div class="column">
-            <div id="household-members">
-              <p class="title">Other members of <%= @voter.first_name.capitalize %>'s household</p>
-              <div id="bonus" class="mb-4">
-                <p>
-                  ✨ Bonus ✨ Call these people as well to increase our votes!
-                </p>
-              </div>
-              <div class="box contacts">
-                <div class="table-container">
-                  <table class="table is-fullwidth">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Number</th>
-                        <th>Vote Status</th>
-                        <th class="has-text-centered">Voted in November</th>
-                        <th>Vote plan</th>
-                        <th>Call Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% if @voter.household_members.empty? %>
-                        <tr class="has-text-centered is-light p-5">
-                          <td colspan="6">No household members.</td>
-                        </tr>
-                      <% end %>
-                      <% @voter.household_members.each do |v| %>
-                        <tr>
-                          <td>
-                            <%= link_to v.display_name, voter_path(v) %>
-                          </td>
-                          <td><%= v.phone_number_display %></td>
-                          <td><%= v.voting_status_display || "Unavailable" %></td>
-                          <td class="has-text-centered"><%= v.voted_general ? '✅' : '❌' %></td>
-                          <td><%= v.vote_plan || "Unavailable" %></td>
-                          <td><%= v.last_call_status_display %></td>
-                        </tr>
-                      <% end %>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>
