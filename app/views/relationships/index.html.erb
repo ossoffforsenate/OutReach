@@ -74,7 +74,6 @@
                   <th>Number</th>
                   <th>Email</th>
                   <th>Voter Registration Status</th>
-                  <th>Vote Status</th>
                   <th>Vote Plan</th>
                   <th>Call Status</th>
                 </tr>
@@ -89,7 +88,6 @@
                       <td class="nowrap"><%= v.phone_number_display %></td>
                       <td><%= v.email || "No email given" %></td> <!-- does it defualt to an empty string anyway?-->
                       <td><%= v.voter_registration_status ? v.voter_registration_status_display : "Unavailable "%></td>
-                      <td><%= v.voting_status ? v.voting_status_display : "Unavailable" %></td>
                       <td><%= v.vote_plan || "Unavailable" %></td>
                       <td><%= v.last_call_status_display %></td>
                     </tr>
