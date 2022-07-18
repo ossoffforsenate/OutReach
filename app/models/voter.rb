@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-
 class Voter < ApplicationRecord
   self.primary_key = :reach_id
 
@@ -16,9 +15,11 @@ class Voter < ApplicationRecord
     do_not_call: "Don't call back",
   }.freeze
 
-  VOTE_STATUS_TEXT = {
-    "ballot mailed" => "Needs to Return Ballot",
-    "ballot received" => "Has Voted!",
+  VOTER_REGISTRATION_STATUS_TEXT = {
+    registered_in_district: "Registered in PA HD 82",
+    registered_in_state: "Registered in PA",
+    registereted_out_of_state: "Registered out of state",
+    unregistered: "Unregistered"
   }.freeze
 
   def last_call_status_display
@@ -29,8 +30,9 @@ class Voter < ApplicationRecord
     nil # TODO: implement voting location search if possible
   end
 
-  def voting_status_display
-    VOTE_STATUS_TEXT.fetch(voting_status.downcase, voting_status) || "Unknown"
+  def voter_registration_status_display
+    return "Unknown" unless voter_registration_status
+    VOTER_REGISTRATION_STATUS_TEXT[voter_registration_status.to_sym]
   end
 
   def phone_number_display
