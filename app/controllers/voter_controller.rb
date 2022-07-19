@@ -46,7 +46,7 @@ class VoterController < ApplicationController
       if voter.update(last_call_status: params[:last_call_status])
         record_in_reach(Rails.configuration.reach.responses.to_h.fetch(params[:last_call_status].to_sym))
         calls_logged = current_user.calls_logged
-        flash[:success] = 'Call status updated, check out the next voter to call!'
+        flash[:success] = 'Contact status updated, check out the next voter to call!'
 
         redirect_to voter_next_path
       else

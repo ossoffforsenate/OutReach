@@ -36,7 +36,7 @@
     <div class="columns is-multiline is-centered is-mobile">
       <div class="column is-narrow">
         <%= form_tag voter_path(@voter), method: :patch do %>
-          <%= hidden_field_tag :last_call_status, "should_call_again" %>
+          <%= hidden_field_tag :last_call_status, "should_call_again" %> <!-- CHANGE THIS TO CONTACT AGAIN -->
           <%= submit_tag "Mark to contact again", class: "button is-medium is-info is-light" %>
         <% end %>
       </div>
@@ -51,6 +51,11 @@
           Skip for now
         </a>
       </div>
+      <div class="column is-narrow"> <!-- also needs some changes -->
+        <a href="<%= voter_path(@voter) %>/next?skip=true" class="button is-success is-medium is-light">
+          Edit voter info
+        </a>
+      </div>
     </div>
   </div>
 </section>
@@ -58,6 +63,41 @@
 <section class="section">
   <div class="container">
     <div class="columns is-multiline">
+      <div class="column column is-full-tablet is-half-desktop">
+          <div id="voter-profile">
+              <div id="voter-profile-info">
+                <p class="title"><%= @voter.first_name.capitalize %>'s Profile</p>
+                <div class="box contacts">
+                  <div class="table-container">
+                    <table class="table is-fullwidth">
+                      <thead>
+                        <tr>
+                          <th>Number</th>
+                          <th>Email</th>
+                          <th>Registration</th>
+                          <th class="has-text-centered">Voted in 2020</th>
+                          <th>Vote Plan</th>
+                          <th>Call Status</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                            <td><%= "test"%></td>
+                            </td>
+                            <td><%= "test"%></td>
+                            <td><%= "test"%></td>
+                            <td><%= "test"%></td>
+                            <td><%= "test"%></td>
+                            <td><%= "test"%></td>
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+          </div>
+      </div>
+
       <div class="column is-full-tablet is-half-desktop">
         <div id="conversation-guide-wrapper">
           <p class="title">Conversation Guide</p>
