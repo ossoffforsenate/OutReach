@@ -70,27 +70,30 @@
                 <div class="box contacts">
                   <div class="table-container">
                     <table class="table is-fullwidth">
-                      <thead>
                         <tr>
                           <th>Number</th>
-                          <th>Email</th>
-                          <th>Registration</th>
-                          <th class="has-text-centered">Voted in 2020</th>
-                          <th>Vote Plan</th>
-                          <th>Contact Status</th>
+                          <td style='border:none;'><%= @voter.phone_number_display || "No phone number given"%></td>
                         </tr>
-                      </thead>
-                      <tbody>
-                          <tr>
-                            <td><%= "test"%></td>
-                            </td>
-                            <td><%= "test"%></td>
-                            <td><%= "test"%></td>
-                            <td><%= "test"%></td>
-                            <td><%= "test"%></td>
-                            <td><%= "test"%></td>
-                          </tr>
-                      </tbody>
+                        <tr>
+                          <th>Email</th>
+                          <td style='border:none;'><%= @voter.email || "No email given" %></td> <!-- does it defualt to an empty string anyway?-->
+                        </tr>
+                        <tr>
+                          <th>Registration</th>
+                          <td style='border:none;'><%= @voter.voter_registration_status ? @voter.voter_registration_status_display : "Unavailable "%></tr>
+                        </tr>
+                        <tr>
+                          <th>Voted in 2020</th>
+                          <td style='border:none;'></td>
+                        </tr>
+                        <tr>
+                          <th>Vote Plan</th>
+                          <td style='border:none;'></td>
+                        </tr>
+                        <tr>
+                          <th>Contact Status</th>
+                          <td style='border:none;'><%= @voter.last_call_status_display %></td>
+                        </tr>
                     </table>
                   </div>
                 </div>
@@ -102,10 +105,9 @@
         <div id="conversation-guide-wrapper">
           <p class="title">Conversation Guide</p>
           <div class="box content">
-            <p class="title mb-1">Voting in-person on Tuesday</p>
-            <p class="subtitle mb-1 mt-1">Goal</p>
-            <p class="ml-4">
-              Get contact to commit to a plan to vote.
+            <p class="title mb-1">Voting in-person on Tuesday, November 8th 🗳</p>
+            <p>
+              <p><b>Get your contact to commit to a plan to vote.</b></p>
               <ul>
                 <li>Make sure they know their polling place</li>
                 <li>What time will they go to the polls?</li>
@@ -114,70 +116,63 @@
               </ul>
             </p>
 
-            <p class="subtitle mb-1">Key Info</p>
+            <p><b>Key Info</b></p>
             <p class="ml-4">
               <ul>
-                <li>Election Day is on Tuesday, January 5.</li>
-                <li>Polls are open 7 AM - 7 PM.</li>
+                <li>Election Day is on <b>Tuesday, November 8.</b></li>
+                <li>Polls are open <b>7 AM - 7 PM.</b></li>
                 <li>Bring photo ID</li>
-                <li>Find your polling place at IWillVote.com.</li>
+                <li>Find your polling place at <a href="https://www.pavoterservices.pa.gov/Pages/PollingPlaceInfo.aspx" target="_blank">PA Voter Services</a></li>
               </ul>
             </p>
 
-            <p class="title mb-1">What do I need to bring with me to the polls?</p>
-            <p class="ml-4">Just yourself, your photo ID and your mask!</p>
-
-            <p class="title mb-1">What works as an ID?</p>
+            <p class="title mb-1">What works as an ID? 📂</p>
             <p class="ml-4">
-              Any of these IDs will work. If you have questions, call the Voter Hotline: 888-730-5816.
+              <b>All you need to bring to the polls is yourself and a photo ID!</b> Any of these IDs will work. You can also find this information by clicking <a href ="https://www.vote.pa.gov/Register-to-Vote/Pages/Voter-ID-for-First-Time-Voters.aspx" target="_blank">here.</a> 
               <ul>
-                <li><b>A Georgia Driver’s License</b>, even if it’s expired</li>
-                <li><b>Valid U.S. passport ID</b></li>
-                <li>
-                  <b>Any valid state or federal government issued photo ID</b>,
-                  including a free ID Card issued by your county registrar’s office
-                  or the Georgia Department of Driver Services (DDS)
-                </li>
-                <li><b>Valid employee photo ID</b> from any branch, department, agency, or entity of the U.S. Government, Georgia, or any county, municipality, board, authority or other entity of this state</li>
-                <li><b>Valid U.S. military photo ID</b></li>
-                <li><b>Valid tribal photo ID</b></li>
-                <li><b>A student ID with photo</b> from a <b>public</b> (but not private!) <b>college, university, or technical college.</b></li>
+                <li>A Pennsylvania's driver license or PennDOT ID Card</li>
+                <li>ID issued by any Commonwealth agency</li>
+                <li>ID issued by the US Government</li>
+                <li>U.S. Passport</li>
+                <li>U.S. Armed Forces ID</li>
+                <li>Student ID</li>
+                <li>Employee ID</li>
+              </ul>
+
+              If you do not have a photo ID, you can use a non-photo identification that includes your name and address
+              <ul>
+                <li>Confirmation issued by the County Voter Registration Office</li>
+                <li>Non-photo ID issued by the Commonwealth</li>
+                <li>ID issued by the US Government</li>
+                <li>Firearm permit</li>
+                <li>Current utility bill</li>
+                <li>Current bank statement</li>
+                <li>Current paycheck</li>
+                <li>Government paycheck</li>
               </ul>
             </p>
-            <p class="title mb-1">How should I return my absentee ballot?</p>
-            <p class="mb-4">
+            <p class="title mb-1">Mail In Ballots 📬</p>
+            <p class="ml-4">
               <ul>
                 <li>
-                  It's too late to mail it in. Instead, you should <b>drop it in an official dropbox in your county.</b>
+                  <b>You're allowed to vote by mail in Pennsylvania for ANY reason!</b> Request a mail in ballot by clicking <a href="https://www.pavoterservices.pa.gov/OnlineAbsenteeApplication/#/OnlineAbsenteeBegin" target="_blank">here</a>
                 </li>
-                <li>Your ballot must be <b><i>received</i></b> by 7PM today (Tuesday, Jan. 5).</li>
-                <li>A few counties don't have a drop box, but you can drop it off at the county elections office before they close on Tuesday.</li>
+                <li>You can return completed mail-in ballots in <b>USPS mailboxes</b>, or drop it in an <b>official dropbox in your county.</b></li>
+                <li>Your ballot must be <b><i>received</i></b> by <b>7PM, Tuesday. November 8th.</b></li>
               </ul>
               <p>
-                <b>→ FIND A DROPBOX:</b> <a href="http://ossoff.win/dropbox" target="_blank">ossoff.win/dropbox</a><br/>
+                <b>→ FIND A DROPBOX:</b> TBD<br/>
               </p>
             </p>
 
-            <p class="title mb-1">How can I get a ride to my polling place or dropbox?</p>
-            <p class="ml-4">
-              <p>Check out these resources!</p>
-              <ul>
-                <li><a href="https://www.ridestotherunoff.com" target="_blank">ridetotherunoff.com</a></li>
-                <li><b>Uber</b> is offering  free roundtrip rides to polls or dropboxes with voucher code <b>"VoteGA"</b></li>
-                <li>Call or text 1-800-590-VOTE or the New GA Project 1-800-874-1541</li>
-                <li><b>Georgia ADAPT</b> provides accessible rides statewide for voters with disabilities. To request your ride, <b><a target="_blank" href="https://docs.google.com/forms/d/1vAyewYpU2sAVEc44Zzhfdj-bPiM4_xBOglr2qDdjdqM/viewform?ts=5fcb145f&edit_requested=true&gxids=7628">fill out this form.</a></b></li>
-              </ul>
-            </p>
-
-            <p class="title mb-1">Helpful Links</p>
+            <p class="title mb-1">Check out these resources! 💻</p>
             <p class="ml-4">
               <p>FIND POLLING PLACE: <a href="http://IWillVote.com" target="_blank">IWillVote.com</a></p>
-              <p>TRACK YOUR BALLOT: <a href="http://ossoff.win/track-ballot " target="_blank">ossoff.win/track-ballot </a></p>
-              <p>DETAILS ON VOTING YOUR BALLOT: <a href="http://ossoff.win/absentee-details " target="_blank">ossoff.win/absentee-details </a></p>
-              <p>FIND A DROPBOX: <a href="http://ossoff.win/dropbox" target="_blank">ossoff.win/dropbox</a></p>
-              <p>HOTLINE: <a href="tel:888-730-5816" target="_blank">888-730-5816</a></p>
-              <p>ACCEESSIBLE VOTER TEXTLINE: <a href="tel:833-566-1212">833-566-1212</a></p>
-              <p>VOTER FAQ: <a href="http://electjon.com/faq " target="_blank">electjon.com/faq</a></p>
+              <p>TRACK YOUR BALLOT: <a href="https://www.pavoterservices.pa.gov/Pages/BallotTracking.aspx" target="_blank">PA SOS Ballot Tracker</a></p>
+              <p>DETAILS ON VOTING YOUR BALLOT: TBD</p>
+              <p>FIND A DROPBOX: TBD</p>
+              <p>CENTRE COUNTY ELECTIONS OFFICE: <a href="tel:814-355-6703" target="_blank">814-355-6703</a> or <a mailto="tel:814-355-6703" target="_blank">elections@centrecountypa.gov</a></p>
+              <p>VOTER FAQ: <a href="https://www.vote.pa.gov/Voting-in-PA/Pages/Elections-FAQs.aspx" target="_blank">PA SOS FAQ</a></p>
             </p>
           </div>
         </div>
