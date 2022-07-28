@@ -51,11 +51,6 @@
           Skip for now
         </a>
       </div>
-      <div class="column is-narrow"> <!-- also needs some changes -->
-        <a href="<%= voter_path(@voter) %>/next?skip=true" class="button is-success is-medium is-light">
-          Edit voter info
-        </a>
-      </div>
     </div>
   </div>
 </section>
@@ -72,11 +67,11 @@
                     <table class="table is-fullwidth">
                         <tr>
                           <th>Number</th>
-                          <td style='border:none;'><%= @voter.phone_number_display || "No phone number given"%></td>
+                          <td style='border:none;'><%= @voter.phone_number_display || "No phone number given"%></td> <!-- need to hyperlink -->
                         </tr>
                         <tr>
                           <th>Email</th>
-                          <td style='border:none;'><%= @voter.email || "No email given" %></td> <!-- does it defualt to an empty string anyway?-->
+                          <td style='border:none;'><%= @voter.email || "No email given" %></td> <!-- need to hyperlink -->
                         </tr>
                         <tr>
                           <th>Registration</th>
@@ -84,11 +79,11 @@
                         </tr>
                         <tr>
                           <th>Voted in 2020</th>
-                          <td style='border:none;'></td>
+                          <td style='border:none;'>Unavailable</td>
                         </tr>
                         <tr>
                           <th>Vote Plan</th>
-                          <td style='border:none;'></td>
+                          <td style='border:none;'>Unavailable</td>
                         </tr>
                         <tr>
                           <th>Contact Status</th>
@@ -98,6 +93,153 @@
                   </div>
                 </div>
               </div>
+          </div>
+
+          <div id="edit-voter-profile" style="padding-top: 10px;">
+            <div id="edit-voter-profile-info">
+              <div class="box contacts">
+
+                <div class="field">
+                  <label class="label">Email</label>
+                    <div class="control has-icons-left has-icons-right">
+                      <input class="input is-danger" type="email" placeholder="Enter email" value=<%=@voter.email%>>
+                      <span class="icon is-small is-left">
+                        <i class="fas fa-envelope"></i>
+                      </span>
+                      <span class="icon is-small is-right">
+                        <i class="fas fa-exclamation-triangle"></i>
+                      </span>
+                    </div>
+                    <p class="help is-danger">This email is invalid</p>
+                </div>
+
+                <div class="field">
+                  <label class="label">Voter Registration Status</label>
+                  <div class="control">
+                    <div class="select" disabled="true">
+                      <select> <!-- set default to what their current registration is -->
+                      <option>Registered in PA HD 82</option>
+                      <option>Pending registration in PA HD 82</option>
+                      <option>Registered in PA out of HD 82</option>
+                      <option>Registered out of state</option>
+                      <option>Unregistered</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="label">Notes</label>
+                  <div class="control">
+                    <textarea class="textarea" placeholder="Place any misc. notes here"></textarea>
+                  </div>
+                </div>
+
+                <div class="field"> <!-- also needs some changes -->
+                  <a href="<%= voter_path(@voter) %>/next?skip=true" class="button is-success is-medium is-light">
+                    Submit changes
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="survey-voter-data" style="padding-top: 10px;">
+            <div id="survey-voter-data-info">
+              <div class="box contacts">
+
+                <div class="field">
+                  <div class="control">
+                    What issues are motivating you to get out to vote this November?<br>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Healthcare
+                    </label>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Racial Injustice
+                    </label>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      The economy
+                    </label>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Reproductive rights
+                    </label>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Gun control
+                    </label>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Foreign Policy
+                    </label>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Immigration
+                    </label>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Threats to democracy
+                    </label>
+                    <label class="checkbox">
+                      <input type="checkbox">
+                      Covid
+                    </label>
+                  </div>
+                  <br><textarea class="textarea" placeholder="Write in any issues that are not accounted for in the checklist above"></textarea>
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                    Were you already planning to vote this November?<br>
+                    <label class="radio">
+                      <input type="radio" name="question">
+                      Yes
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="question">
+                      No
+                    </label>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                    If you were planning on voting this November, were you already planning on voting for Paul?<br>
+                    <label class="radio">
+                      <input type="radio" name="question">
+                      Yes
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="question">
+                      No
+                    </label>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <div class="control">
+                    If you were planning on voting this November, were you already planning on voting for Democrats across the ballot?<br>
+                    <label class="radio">
+                      <input type="radio" name="question">
+                      Yes
+                    </label>
+                    <label class="radio">
+                      <input type="radio" name="question">
+                      No
+                    </label>
+                  </div>
+                </div>
+
+                <div class="field"> <!-- also needs some changes -->
+                  <a href="<%= voter_path(@voter) %>/next?skip=true" class="button is-success is-medium is-light">
+                    Submit survey data
+                  </a>
+                </div>
+              </div>
+            </div>
           </div>
       </div>
 
