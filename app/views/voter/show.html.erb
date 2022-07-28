@@ -102,43 +102,16 @@
                 <div class="field">
                   <label class="label">Email</label>
                     <div class="control has-icons-left has-icons-right">
-                      <input class="input is-danger" type="email" placeholder="Enter email" value=<%=@voter.email%>>
+                      <%= form_tag voter_path(@voter), method: :patch do %>
+                        <%= email_field_tag :email, @voter.email, class: "input"%>
+                        <%= select_tag :voter_registration_status, raw("<option>Registered in PA HD 82</option><option>Registered in PA out of HD 82</option><option>Registered out of state</option><option>Unregistered</option><option>Pending registration in PA HD 82</option>"), class:"select", style: "margin-top: 10px;"%>
+                        <%= text_area_tag :notes, @voter.notes, class:"textarea", placeholder:"Place notes here", style: "margin-top: 10px;" %>
+                        <%= submit_tag "Save changes", class:"button is-success is-medium is-light", style: "margin-top: 10px;" %>
+                      <% end %> 
                       <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                       </span>
-                      <span class="icon is-small is-right">
-                        <i class="fas fa-exclamation-triangle"></i>
-                      </span>
                     </div>
-                    <p class="help is-danger">This email is invalid</p>
-                </div>
-
-                <div class="field">
-                  <label class="label">Voter Registration Status</label>
-                  <div class="control">
-                    <div class="select" disabled="true">
-                      <select> <!-- set default to what their current registration is -->
-                      <option>Registered in PA HD 82</option>
-                      <option>Pending registration in PA HD 82</option>
-                      <option>Registered in PA out of HD 82</option>
-                      <option>Registered out of state</option>
-                      <option>Unregistered</option>
-                      </select>
-                    </div>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <label class="label">Notes</label>
-                  <div class="control">
-                    <textarea class="textarea" placeholder="Place any misc. notes here"></textarea>
-                  </div>
-                </div>
-
-                <div class="field"> <!-- also needs some changes -->
-                  <a href="<%= voter_path(@voter) %>/next?skip=true" class="button is-success is-medium is-light">
-                    Submit changes
-                  </a>
                 </div>
               </div>
             </div>
@@ -188,7 +161,7 @@
                       Covid
                     </label>
                   </div>
-                  <br><textarea class="textarea" placeholder="Write in any issues that are not accounted for in the checklist above"></textarea>
+                  <textarea class="textarea" placeholder="Write in any issues that are not accounted for in the checklist"></textarea>
                 </div>
 
                 <div class="field">

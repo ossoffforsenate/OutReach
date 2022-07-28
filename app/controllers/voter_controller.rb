@@ -54,6 +54,24 @@ class VoterController < ApplicationController
         redirect_to voter_next_path
       end
     end
+
+    if params[:email]
+      current_user.log_call!
+      voter.update(email: params[:email])
+    end
+
+    # talk to ben about the conversion here
+    if params[:voter_registration_status]
+      current_user.log_call!
+      voter.update(voter_registration_status: params[:voter_registration_status])
+    end
+
+    if params[:notes]
+        current_user.log_call!
+        voter.update(notes: params[:notes])
+    end
+
+    redirect_to @voter
   end
 
   private
