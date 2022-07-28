@@ -104,6 +104,7 @@
                     <div class="control has-icons-left has-icons-right">
                       <%= form_tag voter_path(@voter), method: :patch do %>
                         <%= email_field_tag :email, @voter.email, class: "input"%>
+                        <!-- registration status is only cosmetic, does not work on back end as of now -->
                         <%= select_tag :voter_registration_status, raw("<option>Registered in PA HD 82</option><option>Registered in PA out of HD 82</option><option>Registered out of state</option><option>Unregistered</option><option>Pending registration in PA HD 82</option>"), class:"select", style: "margin-top: 10px;"%>
                         <%= text_area_tag :notes, @voter.notes, class:"textarea", placeholder:"Place notes here", style: "margin-top: 10px;" %>
                         <%= submit_tag "Save changes", class:"button is-success is-medium is-light", style: "margin-top: 10px;" %>
@@ -117,6 +118,7 @@
             </div>
           </div>
 
+          <!-- keeping this for showing off the UI in demos
           <div id="survey-voter-data" style="padding-top: 10px;">
             <div id="survey-voter-data-info">
               <div class="box contacts">
@@ -206,7 +208,7 @@
                   </div>
                 </div>
 
-                <div class="field"> <!-- also needs some changes -->
+                <div class="field"> 
                   <a href="<%= voter_path(@voter) %>/next?skip=true" class="button is-success is-medium is-light">
                     Submit survey data
                   </a>
@@ -214,6 +216,7 @@
               </div>
             </div>
           </div>
+          -->
       </div>
 
       <div class="column is-full-tablet is-half-desktop">
