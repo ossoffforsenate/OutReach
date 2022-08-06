@@ -10,7 +10,13 @@
       </div>
       <div class="columns is-centered has-text-centered">
         <div class="column is-half-tablet is-narrow-mobile">
-          <p id="voter-phone" class="subtitle is-2"><%= @voter.phone_number_display %></p>
+          <p id="voter-phone" class="subtitle is-2">
+            <% if @voter.primary_phone_number %>
+              <%= link_to @voter.phone_number_display, "tel:#{@voter.primary_phone_number}" %>
+            <% else %>
+              No phone number given
+            <% end %>
+          </p>
         </div>
       </div>
       <div id="voter-facts" class="columns is-centered has-text-centered mt-4">
@@ -67,11 +73,23 @@
                     <table class="table is-fullwidth">
                         <tr>
                           <th>Number</th>
-                          <td style='border:none;'><%= @voter.phone_number_display || "No phone number given"%></td> <!-- need to hyperlink -->
+                          <td style='border:none;'>
+                            <% if @voter.primary_phone_number %>
+                              <%= link_to @voter.phone_number_display, "tel:#{@voter.primary_phone_number}" %>
+                            <% else %>
+                              No phone number given
+                            <% end %>
+                          </td>
                         </tr>
                         <tr>
                           <th>Email</th>
-                          <td style='border:none;'><%= @voter.email || "No email given" %></td> <!-- need to hyperlink -->
+                          <td style='border:none;'>
+                            <% if @voter.email %>
+                              <%= link_to @voter.email, "mailto:#{@voter.email}" %>
+                            <% else %>
+                              No email given
+                            <% end %>
+                          </td>
                         </tr>
                         <tr>
                           <th>Registration</th>
