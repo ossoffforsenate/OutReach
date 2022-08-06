@@ -41,32 +41,33 @@ class VoterController < ApplicationController
   end
 
   def update
-    if params[:last_call_status]
+    if voter_params[:last_call_status]
       current_user.log_call!
-      if voter.update(last_call_status: params[:last_call_status])
-        record_in_reach(Rails.configuration.reach.responses.to_h.fetch(params[:last_call_status].to_sym))
-        calls_logged = current_user.calls_logged
-        flash[:success] = 'Contact status updated, check out the next voter to call!'
+      # TODO: un-comment this if we want to sync responses to the Reach API
+      # record_in_reach(Rails.configuration.reach.responses.to_h.fetch(params[:last_call_status].to_sym))
+    end
 
+    if voter.update(voter_params)
+      flash[:error] = "Error saving changes, try again"
+
+      # if last_call_status is what changed, we want to redirect to the next
+      # voter. Else we just want to reload the previous voter
+      if voter_params[:last_call_status]
+        flash[:success] = 'Contact status updated, check out the next voter to call!'
         redirect_to voter_next_path
       else
-        flash[:danger] = 'Error updating call status, try clicking again!'
-        redirect_to voter_next_path
+        flash[:success] = 'Changes saved successfully'
       end
+    else
+      flash[:danger] = 'Error recording changes, try again!'
+      redirect_to @voter
     end
-
-    current_user.log_call!
-    if !voter.update(voter_params)
-      flash[:error] = "Error saving changes, try again"
-    end
-
-    redirect_to @voter
   end
 
   private
 
   def voter_params
-    params.require(:voter).permit(:email, :voter_registration_status, :notes)
+    params.require(:voter).permit(:email, :last_call_status, :voter_registration_status, :notes)
   end
 
   def migrate_voters_seen

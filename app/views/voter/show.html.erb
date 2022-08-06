@@ -35,15 +35,15 @@
   <div class="container">
     <div class="columns is-multiline is-centered is-mobile">
       <div class="column is-narrow">
-        <%= form_tag voter_path(@voter), method: :patch do %>
-          <%= hidden_field_tag :last_call_status, "should_call_again" %> <!-- CHANGE THIS TO CONTACT AGAIN -->
-          <%= submit_tag "Mark to contact again", class: "button is-medium is-info is-light" %>
+        <%= form_for @voter do |f| %>
+          <%= f.hidden_field :last_call_status, value: "should_call_again" %><!-- CHANGE THIS TO CONTACT AGAIN -->
+          <%= f.submit "Mark to contact again", class: "button is-medium is-info is-light" %>
         <% end %>
       </div>
       <div class="column is-narrow">
-        <%= form_tag voter_path(@voter), method: :patch do %>
-          <%= hidden_field_tag :last_call_status, "do_not_call" %>
-          <%= submit_tag "Don't contact again", class: "button is-medium is-warning is-light" %>
+        <%= form_for @voter do |f| %>
+          <%= f.hidden_field :last_call_status, value: "do_not_call" %><!-- CHANGE THIS TO DO NOT CONTACT -->
+          <%= f.submit "Don't contact again", class: "button is-medium is-warning is-light" %>
         <% end %>
       </div>
       <div class="column is-narrow">
@@ -102,13 +102,12 @@
                 <div class="field">
                   <label class="label">Email</label>
                     <div class="control has-icons-left has-icons-right">
-                      <%= form_tag voter_path(@voter), method: :patch do %>
-                        <%= email_field_tag :email, @voter.email, class: "input"%>
-                        <!-- registration status is only cosmetic, does not work on back end as of now -->
-                        <%= select_tag :voter_registration_status, raw("<option>Registered in PA HD 82</option><option>Registered in PA out of HD 82</option><option>Registered out of state</option><option>Unregistered</option><option>Pending registration in PA HD 82</option>"), class:"select", style: "margin-top: 10px;"%>
-                        <%= text_area_tag :notes, @voter.notes, class:"textarea", placeholder:"Place notes here", style: "margin-top: 10px;" %>
-                        <%= submit_tag "Save changes", class:"button is-success is-medium is-light", style: "margin-top: 10px;" %>
-                      <% end %> 
+                      <%= form_for @voter do |f| %>
+                        <%= f.email_field :email, class: "input" %>
+                        <%= f.select :voter_registration_status, options_for_select(Voter.voter_registration_statuses.map {|k, v| [k.titleize, Voter.voter_registration_statuses.key(v)]}, @voter.voter_registration_status) %>
+                        <%= f.text_area :notes, class: "textarea", placeholder: "Place notes here", style: "margin-top: 10px;" %>
+                        <%= f.submit "Save changes", class:"button is-success is-medium is-light", style: "margin-top: 10px;" %>
+                      <% end %>
                       <span class="icon is-small is-left">
                         <i class="fas fa-envelope"></i>
                       </span>
@@ -208,7 +207,7 @@
                   </div>
                 </div>
 
-                <div class="field"> 
+                <div class="field">
                   <a href="<%= voter_path(@voter) %>/next?skip=true" class="button is-success is-medium is-light">
                     Submit survey data
                   </a>
@@ -246,7 +245,7 @@
 
             <p class="title mb-1">What works as an ID? 📂</p>
             <p class="ml-4">
-              <b>All you need to bring to the polls is yourself and a photo ID!</b> Any of these IDs will work. You can also find this information by clicking <a href ="https://www.vote.pa.gov/Register-to-Vote/Pages/Voter-ID-for-First-Time-Voters.aspx" target="_blank">here.</a> 
+              <b>All you need to bring to the polls is yourself and a photo ID!</b> Any of these IDs will work. You can also find this information by clicking <a href ="https://www.vote.pa.gov/Register-to-Vote/Pages/Voter-ID-for-First-Time-Voters.aspx" target="_blank">here.</a>
               <ul>
                 <li>A Pennsylvania's driver license or PennDOT ID Card</li>
                 <li>ID issued by any Commonwealth agency</li>
