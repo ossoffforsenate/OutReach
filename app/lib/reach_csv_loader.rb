@@ -26,7 +26,7 @@ class ReachCsvLoader
         middle_name: row["Middle Name"],
         suffix: row["Suffix"],
         phone_country_code: row["Phone Country Code"],
-        primary_phone_number: row["Phone Number"],
+        primary_phone_number: row["Phone"],
         email: row["Email"],
         voting_street_address: address,
         voting_zip: row["Zip"],
