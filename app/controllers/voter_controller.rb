@@ -55,26 +55,19 @@ class VoterController < ApplicationController
       end
     end
 
-    if params[:email]
-      current_user.log_call!
-      voter.update(email: params[:email])
-    end
-
-    # talk to ben about the conversion here
-    if params[:voter_registration_status]
-      current_user.log_call!
-      voter.update(voter_registration_status: params[:voter_registration_status])
-    end
-
-    if params[:notes]
-        current_user.log_call!
-        voter.update(notes: params[:notes])
+    current_user.log_call!
+    if !voter.update(voter_params)
+      flash[:error] = "Error saving changes, try again"
     end
 
     redirect_to @voter
   end
 
   private
+
+  def voter_params
+    params.require(:voter).permit(:email, :voter_registration_status, :notes)
+  end
 
   def migrate_voters_seen
     if current_user && session[:voters_seen].is_a?(Hash)

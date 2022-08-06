@@ -14,9 +14,7 @@ class UsersController < ApplicationController
         redirect_to verify_url
       end
     elsif current_user
-      # TEMP CHANGE FOR TESTING
-      redirect_to root_path
-      # start_verification(current_user.phone_number)
+      start_verification(current_user.phone_number)
     else
       redirect_to '/login'
     end
