@@ -71,6 +71,6 @@ class ReachCsvLoader
       }
     end
 
-    !Relationship.upsert_all(to_upsert.unique { |r| "#{r[:user_id]} #{r[:voter_reach_id]}", unique_by: [:user_id, :voter_reach_id])
+    !Relationship.upsert_all(to_upsert.unique { |r| "#{r[:user_id]} #{r[:voter_reach_id]}" }, unique_by: [:user_id, :voter_reach_id])
   end
 end
