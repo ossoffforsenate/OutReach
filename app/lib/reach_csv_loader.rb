@@ -38,7 +38,7 @@ class ReachCsvLoader
       }
     end
 
-    !Voter.upsert_all(to_upsert.unique { |v| v[:reach_id] }, unique_by: nil)
+    !Voter.upsert_all(to_upsert.uniq { |v| v[:reach_id] }, unique_by: nil)
   end
 
   def load_users
@@ -56,7 +56,7 @@ class ReachCsvLoader
       }
     end
 
-    !User.upsert_all(to_upsert.unique { |u| u[:id] }, unique_by: nil)
+    !User.upsert_all(to_upsert.uniq { |u| u[:id] }, unique_by: nil)
   end
 
   def load_relationships
@@ -71,6 +71,6 @@ class ReachCsvLoader
       }
     end
 
-    !Relationship.upsert_all(to_upsert.unique { |r| "#{r[:user_id]} #{r[:voter_reach_id]}" }, unique_by: [:user_id, :voter_reach_id])
+    !Relationship.upsert_all(to_upsert.uniq { |r| "#{r[:user_id]} #{r[:voter_reach_id]}" }, unique_by: [:user_id, :voter_reach_id])
   end
 end
