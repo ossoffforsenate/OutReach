@@ -118,7 +118,7 @@
               <div class="box contacts">
                 <%= form_for @voter do |f| %>
                 <div class="table-container">
-                  <table class="table is-fullwidth"> 
+                  <table class="table is-fullwidth">
                     <tr>
                       <th>Enter email</th>
                       <td style='border:none;'><%= f.email_field :email, class: "input"%></td>
@@ -188,8 +188,8 @@
                   <td style='border:none;'>
                   <%= check_box_tag :planned_to_vote_for_paul, @voter.safe_survey_data["plan_to_vote_for_paul"], @voter.safe_survey_data["plan_to_vote_for_paul"] == "1" ? true : false %>
                   <br>
-                <%= submit_tag "Submit survey data", class:"button is-active is-success is-medium is-light", style: "margin-top: 10px;" %>
-              <% end %>
+                  <%= submit_tag "Submit survey data", class:"button is-active is-success is-medium is-light", style: "margin-top: 10px;" %>
+                <% end %>
               </div>
             </div>
           </div>

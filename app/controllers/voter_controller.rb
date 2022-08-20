@@ -56,6 +56,7 @@ class VoterController < ApplicationController
         redirect_to voter_next_path
       else
         flash[:success] = 'Changes saved successfully'
+        redirect_to @voter
       end
     else
       flash[:danger] = 'Error recording changes, try again!'
@@ -64,7 +65,7 @@ class VoterController < ApplicationController
   end
 
   def update_survey
-    survey_data_from_form = 
+    survey_data_from_form =
     {
         "issues" => {
           "cares_climate" => params[:cares_about_climate].present? ? "1" : "0",
@@ -83,7 +84,13 @@ class VoterController < ApplicationController
     }
 
     voter = Voter.find(params[:id])
-    voter.update!(survey_data: survey_data_from_form.to_json)
+    if voter.update(survey_data: survey_data_from_form.to_json)
+      flash[:success] = 'Survey data updated'
+    else
+      flash[:danger] = 'Error updating survey responses, try again'
+    end
+
+    redirect_to @voter
   end
 
   private
