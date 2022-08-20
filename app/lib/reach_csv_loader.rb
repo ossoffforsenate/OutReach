@@ -6,10 +6,10 @@ class ReachCsvLoader
   USER_FILE_LOCATION = ENV['REACH_USER_FILE']
   RELATIONSHIP_FILE_LOCATION = ENV['REACH_RELATIONSHIP_FILE']
 
-  def load_voters
+  def load_voters(from: VOTER_FILE_LOCATION)
     to_upsert = []
 
-    ::CSV.foreach(VOTER_FILE_LOCATION, headers: true) do |row|
+    ::CSV.foreach(from, headers: true) do |row|
       address_line_1 = row["Address Line 1"]
       address_line_2 = row["Address Line 2"]
 
@@ -41,10 +41,10 @@ class ReachCsvLoader
     !Voter.upsert_all(to_upsert.uniq { |v| v[:reach_id] }, unique_by: nil)
   end
 
-  def load_users
+  def load_users(from: USER_FILE_LOCATION)
     to_upsert = []
 
-    ::CSV.foreach(USER_FILE_LOCATION, headers: true) do |row|
+    ::CSV.foreach(from, headers: true) do |row|
       to_upsert << {
         first_name: row["First Name"],
         last_name: row["Last Name"],
@@ -59,9 +59,9 @@ class ReachCsvLoader
     !User.upsert_all(to_upsert.uniq { |u| u[:id] }, unique_by: nil)
   end
 
-  def load_relationships
+  def load_relationships(from: RELATIONSHIP_FILE_LOCATION)
     to_upsert = []
-    ::CSV.foreach(RELATIONSHIP_FILE_LOCATION, headers: true) do |row|
+    ::CSV.foreach(from, headers: true) do |row|
       to_upsert << {
         user_id: row["User ID"],
         voter_reach_id: row["Reach ID"],
