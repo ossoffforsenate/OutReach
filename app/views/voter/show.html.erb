@@ -116,124 +116,83 @@
           <div id="edit-voter-profile" style="padding-top: 10px;">
             <div id="edit-voter-profile-info">
               <div class="box contacts">
-
-                <div class="field">
-                  <label class="label">Email</label>
-                    <div class="control has-icons-left has-icons-right">
-                      <%= form_for @voter do |f| %>
-                        <%= f.email_field :email, class: "input" %>
-                        <%= f.select :voter_registration_status, options_for_select(Voter.voter_registration_statuses.map {|k, v| [k.titleize, Voter.voter_registration_statuses.key(v)]}, @voter.voter_registration_status) %>
-                        <%= f.text_area :notes, class: "textarea", placeholder: "Place notes here", style: "margin-top: 10px;" %>
-                        <%= f.submit "Save changes", class:"button is-success is-medium is-light", style: "margin-top: 10px;" %>
-                      <% end %>
-                      <span class="icon is-small is-left">
-                        <i class="fas fa-envelope"></i>
-                      </span>
-                    </div>
+                <%= form_for @voter do |f| %>
+                <div class="table-container">
+                  <table class="table is-fullwidth"> 
+                    <tr>
+                      <th>Enter email</th>
+                      <td style='border:none;'><%= f.email_field :email, class: "input"%></td>
+                    </tr>
+                    <tr>
+                      <th>Registration status</th>
+                      <td style='border:none;'><%= f.select :voter_registration_status, options_for_select(Voter.voter_registration_statuses.map {|k, v| [k.titleize, Voter.voter_registration_statuses.key(v)]}, @voter.voter_registration_status) %></td>
+                    </tr>
+                    <tr>
+                      <th>Party ID</th>
+                      <td style='border:none;'><%= f.select :party_id, options_for_select([ "Democrat", "Republican", "Independent", "Green", "Other" ], @voter.party_id) %></td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td style='border:none;'><%= f.text_area :notes, class: "textarea", placeholder: "Place notes here", style: "margin-top: 10px;" %></td>
+                    </tr>
+                  </table>
+                  <%= f.submit "Save changes", class:"button is-active is-success is-medium is-light", style: "margin-top: 10px;" %>
+                  <% end %>
                 </div>
               </div>
             </div>
           </div>
 
-          <!-- keeping this for showing off the UI in demos
           <div id="survey-voter-data" style="padding-top: 10px;">
             <div id="survey-voter-data-info">
               <div class="box contacts">
-
-                <div class="field">
-                  <div class="control">
-                    What issues are motivating you to get out to vote this November?<br>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      Healthcare
-                    </label>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      Racial Injustice
-                    </label>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      The economy
-                    </label>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      Reproductive rights
-                    </label>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      Gun control
-                    </label>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      Foreign Policy
-                    </label>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      Immigration
-                    </label>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      Threats to democracy
-                    </label>
-                    <label class="checkbox">
-                      <input type="checkbox">
-                      Covid
-                    </label>
-                  </div>
-                  <textarea class="textarea" placeholder="Write in any issues that are not accounted for in the checklist"></textarea>
-                </div>
-
-                <div class="field">
-                  <div class="control">
-                    Were you already planning to vote this November?<br>
-                    <label class="radio">
-                      <input type="radio" name="question">
-                      Yes
-                    </label>
-                    <label class="radio">
-                      <input type="radio" name="question">
-                      No
-                    </label>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <div class="control">
-                    If you were planning on voting this November, were you already planning on voting for Paul?<br>
-                    <label class="radio">
-                      <input type="radio" name="question">
-                      Yes
-                    </label>
-                    <label class="radio">
-                      <input type="radio" name="question">
-                      No
-                    </label>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <div class="control">
-                    If you were planning on voting this November, were you already planning on voting for Democrats across the ballot?<br>
-                    <label class="radio">
-                      <input type="radio" name="question">
-                      Yes
-                    </label>
-                    <label class="radio">
-                      <input type="radio" name="question">
-                      No
-                    </label>
-                  </div>
-                </div>
-
-                <div class="field">
-                  <a href="<%= voter_path(@voter) %>/next?skip=true" class="button is-success is-medium is-light">
-                    Submit survey data
-                  </a>
-                </div>
+                <%= form_tag voter_path(@voter) + "/update_survey", id:"survey-form" do %>
+                  <th><b>What issues are most important to you?</b></th>
+                  <td style='border:none;'>
+                  <br>
+                  <%= check_box_tag :cares_about_climate, @voter.safe_survey_data["issues"]["cares_climate"], @voter.safe_survey_data["issues"]["cares_climate"] == "1" ? true : false %>
+                  <%= label :cares_about_climate, "Climate change", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_gun_control, @voter.safe_survey_data["issues"]["cares_gun_control"], @voter.safe_survey_data["issues"]["cares_gun_control"] == "1" ? true : false %>
+                  <%= label :cares_about_gun_control, "Gun control", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_healthcare, @voter.safe_survey_data["issues"]["cares_healthcare"], @voter.safe_survey_data["issues"]["cares_healthcare"] == "1" ? true : false %>
+                  <%= label :cares_about_healthcare, "Healthcare", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_college_affordability, @voter.safe_survey_data["issues"]["cares_college_affordability"], @voter.safe_survey_data["issues"]["cares_college_affordability"] == "1" ? true : false %>
+                  <%= label :cares_about_college_affordability, "College affordability", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_reproductive_rights, @voter.safe_survey_data["issues"]["cares_reproductive_rights"], @voter.safe_survey_data["issues"]["cares_reproductive_rights"] == "1" ? true : false %>
+                  <%= label :cares_about_reproductive_rights, "Reproductive rights", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_transparency, @voter.safe_survey_data["issues"]["cares_transparency"], @voter.safe_survey_data["issues"]["cares_transparency"] == "1" ? true : false %>
+                  <%= label :cares_about_transparency, "Accountability/transparency of government officials", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_marijuana, @voter.safe_survey_data["issues"]["cares_marijuana"], @voter.safe_survey_data["issues"]["cares_marijuana"] == "1" ? true : false %>
+                  <%= label :cares_about_marijuana, "Marijuana legalization/Expungement of Recordsloc", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_gender_equity, @voter.safe_survey_data["issues"]["cares_gender_equity"], @voter.safe_survey_data["issues"]["cares_gender_equity"] == "1" ? true : false %>
+                  <%= label :cares_about_gender_equity, "Gender equity/Title XI", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_gender_pay_gap, @voter.safe_survey_data["issues"]["cares_pay_gap"], @voter.safe_survey_data["issues"]["cares_pay_gap"] == "1" ? true : false %>
+                  <%= label :cares_about_gender_pay_gap, "Gender pay gap", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_sexual_assault, @voter.safe_survey_data["issues"]["cares_sexual_assault"], @voter.safe_survey_data["issues"]["cares_sexual_assault"] == "1" ? true : false %>
+                  <%= label :cares_about_sexual_assault, "Sexual assault/violence", class: "tag is-info"%>
+                  <br>
+                  <th><b>Check this box if the voter was planning on voting in November prior to you reaching out to them:</b></th>
+                  <td style='border:none;'>
+                  <%= check_box_tag :planned_to_vote_before, @voter.safe_survey_data["plan_to_vote_before"], @voter.safe_survey_data["plan_to_vote_before"] == "1" ? true : false %>
+                  <br>
+                  <th><b>If the voter was planning on voting this November, check this box if they were planning on voting for Paul:</b></th>
+                  <td style='border:none;'>
+                  <%= check_box_tag :planned_to_vote_for_paul, @voter.safe_survey_data["plan_to_vote_for_paul"], @voter.safe_survey_data["plan_to_vote_for_paul"] == "1" ? true : false %>
+                  <br>
+                <%= submit_tag "Submit survey data", class:"button is-active is-success is-medium is-light", style: "margin-top: 10px;" %>
+              <% end %>
               </div>
             </div>
           </div>
-          -->
       </div>
 
       <div class="column is-full-tablet is-half-desktop">

@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   resources :relationships, only: [:index]
   get '/voter/next',            to: 'voter#next' # without an id = get first available voter
   get '/voter/:id/next',        to: 'voter#next' # with an id = get voter after current voter
-  resources :voter, only: [:show, :update]
+  post '/voter/:id/update_survey', to: 'voter#update_survey'
+  resources :voter, only: [:show, :update, :update_survey]
 
   get 'verify', to: 'users#verify', as: 'verify'
   post 'verify', to: 'users#verify'
