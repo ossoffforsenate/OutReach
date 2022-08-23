@@ -24,14 +24,6 @@
         <p class="title">
           Your Stats
         </p>
-        <% if @tier_4_size > 0 %>
-          <span class="icon-text">
-            <span class="icon">
-              <i class="fas fa-info-circle"></i>
-            </span>
-            <span>This app excludes <%= pluralize @tier_4_size, "voter" %> who <%= @tier_4_size == 1 ? "is not a supporter or already voted" : "are unlikely supporters or already voted" %></span>
-          </span>
-        <% end %>
       </div>
     </div>
     <div class="columns">
@@ -43,16 +35,6 @@
           <p class="subtitle stat-label">
             Direct contact<%= @contacts.size != 1 ? "s" : "" %>
           </p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="box user-stat">
-            <p class="title">
-              <%= @secondary_contacts.size %>
-            </p>
-            <p class="subtitle stat-label">
-            Household member<%= @secondary_contacts.size != 1 ? "s" : "" %> of contacts
-            </p>
         </div>
       </div>
       <div class="column">
@@ -90,9 +72,9 @@
                 <tr>
                   <th>Name</th>
                   <th>Number</th>
-                  <th>Vote Status</th>
-                  <th class="has-text-centered">Voted in November</th>
-                  <th>Vote plan</th>
+                  <th>Email</th>
+                  <th>Voter Registration Status</th>
+                  <th>Vote Plan</th>
                   <th>Call Status</th>
                 </tr>
               </thead>
@@ -104,8 +86,8 @@
                         <%= link_to v.display_name, voter_path(v) %>
                       </td>
                       <td class="nowrap"><%= v.phone_number_display %></td>
-                      <td><%= v.voting_status_display || "Unavailable" %></td>
-                      <td class="has-text-centered"><%= v.voted_general ? '✅' : '❌' %></td>
+                      <td><%= v.email || "No email given" %></td> <!-- does it defualt to an empty string anyway?-->
+                      <td><%= v.voter_registration_status ? v.voter_registration_status_display : "Unavailable "%></td>
                       <td><%= v.vote_plan || "Unavailable" %></td>
                       <td><%= v.last_call_status_display %></td>
                     </tr>
@@ -118,24 +100,6 @@
                 <tr class="household-member label">
                   <td colspan="6">Other voters in contacts' households:</td>
                 </tr>
-                <% if @secondary_contacts.any? %>
-                  <% @secondary_contacts.each_with_index do |v| %>
-                    <tr>
-                      <td>
-                        <%= link_to v.display_name, voter_path(v) %>
-                      </td>
-                      <td class="nowrap"><%= v.phone_number_display %></td>
-                      <td><%= v.voting_status_display || "Unavailable" %></td>
-                      <td class="has-text-centered"><%= v.voted_general ? '✅' : '❌' %></td>
-                      <td><%= v.vote_plan || "Unavailable" %></td>
-                      <td><%= v.last_call_status_display %></td>
-                    </tr>
-                  <% end %>
-                <% else %>
-                  <tr class="has-text-centered is-light p-5">
-                    <td colspan="6">No household members to show. Data may be 15-20 minutes delayed for recent Reach updates.</td>
-                  </tr>
-                <% end %>
               </tbody>
             </table>
           </div>

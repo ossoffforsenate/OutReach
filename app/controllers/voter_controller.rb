@@ -14,7 +14,7 @@ class VoterController < ApplicationController
   def next
     call_list = current_user.call_list
     voters_seen = current_user.seen_voters
-    next_voter = call_list.find { |v| !voters_seen[v.sos_id.to_s] }
+    next_voter = call_list.find { |v| !voters_seen[v.reach_id] }
 
     if params[:skip] && voter
       record_in_reach(Rails.configuration.reach.responses[:skip])
@@ -41,35 +41,34 @@ class VoterController < ApplicationController
   end
 
   def update
-    if params[:last_call_status]
+    if voter_params[:last_call_status]
       current_user.log_call!
-      if voter.update(last_call_status: params[:last_call_status])
-        record_in_reach(Rails.configuration.reach.responses.to_h.fetch(params[:last_call_status].to_sym))
-        calls_logged = current_user.calls_logged
-        if Rails.configuration.rewards.videos.key?(calls_logged.to_s)
-          flash[:success] = Rails.configuration.rewards.messages[:success]
-          flash[:confetti] = true
-          flash[:video] = REWARD_VIDEOS[calls_logged]
-        elsif calls_logged == 1
-          flash[:success] = Rails.configuration.rewards.messages[:first]
-          flash[:confetti] = true
-        else
-          flash[:success] = 'Call status updated, check out the next voter to call!'
-        end
+      # TODO: un-comment this if we want to sync responses to the Reach API
+      # record_in_reach(Rails.configuration.reach.responses.to_h.fetch(params[:last_call_status].to_sym))
+    end
 
+    if voter.update(voter_params)
+      flash[:error] = "Error saving changes, try again"
+
+      # if last_call_status is what changed, we want to redirect to the next
+      # voter. Else we just want to reload the previous voter
+      if voter_params[:last_call_status]
+        flash[:success] = 'Contact status updated, check out the next voter to call!'
         redirect_to voter_next_path
       else
-        flash[:danger] = 'Error updating call status, try clicking again!'
-        redirect_to voter_next_path
+        flash[:success] = 'Changes saved successfully'
       end
-    elsif params[:is_needs_a_ride_form]
-      needs_a_ride = params[:needs_a_ride] == "1"
-      record_in_reach(Rails.configuration.reach.responses[:needs_a_ride]) if needs_a_ride
-      voter.update(needs_a_ride: needs_a_ride)
+    else
+      flash[:danger] = 'Error recording changes, try again!'
+      redirect_to @voter
     end
   end
 
   private
+
+  def voter_params
+    params.require(:voter).permit(:email, :last_call_status, :voter_registration_status, :notes)
+  end
 
   def migrate_voters_seen
     if current_user && session[:voters_seen].is_a?(Hash)
@@ -84,17 +83,8 @@ class VoterController < ApplicationController
 
   def authorize_and_set_contact
     return unless voter.relationships.where(user: current_user).empty?
-    same_household_voter = voter.
-      household_members.
-      where(sos_id: current_user.relationships.select(:voter_sos_id)).
-      first
-
-    if same_household_voter
-      @same_household_voter = same_household_voter
-    else
-      flash[:danger] = "You don't have access to that voter's details"
-      redirect_back(fallback_location: root_path)
-    end
+    flash[:danger] = "You don't have access to that voter's details"
+    redirect_back(fallback_location: root_path)
   end
 
   def record_in_reach(choice_id)

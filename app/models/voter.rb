@@ -1,12 +1,13 @@
 # frozen_string_literal: true
-
 class Voter < ApplicationRecord
-  self.primary_key = :sos_id
+  self.primary_key = :reach_id
 
-  has_many :relationships, foreign_key: :voter_sos_id
+  has_many :relationships, foreign_key: :voter_reach_id
   has_many :users, through: :relationships
 
   enum last_call_status: [ :not_yet_called, :should_call_again, :do_not_call ]
+  enum voter_data_status: [:reach_match, :manual_match, :unmatched]
+  enum voter_registration_status: [:registered_in_district, :registered_in_state, :registereted_out_of_state, :unregistered]
 
   CALL_STATUS_TEXT = {
     not_yet_called: "Not called",
@@ -14,9 +15,11 @@ class Voter < ApplicationRecord
     do_not_call: "Don't call back",
   }.freeze
 
-  VOTE_STATUS_TEXT = {
-    "ballot mailed" => "Needs to Return Ballot",
-    "ballot received" => "Has Voted!",
+  VOTER_REGISTRATION_STATUS_TEXT = {
+    registered_in_district: "Registered in PA HD 82",
+    registered_in_state: "Registered in PA",
+    registereted_out_of_state: "Registered out of state",
+    unregistered: "Unregistered"
   }.freeze
 
   def last_call_status_display
@@ -24,19 +27,12 @@ class Voter < ApplicationRecord
   end
 
   def polling_place_display
-    if vote_location_address.present?
-      display = ""
-      display += "#{vote_location_name.titleize} | " if vote_location_name.present?
-      display += vote_location_address.titleize
-      display += ", #{vote_location_city}" if vote_location_city.present?
-      display += " (#{vote_location_hours})" if vote_location_hours.present?
-    else
-      nil
-    end
+    nil # TODO: implement voting location search if possible
   end
 
-  def voting_status_display
-    VOTE_STATUS_TEXT.fetch(voting_status.downcase, voting_status) || "Unknown"
+  def voter_registration_status_display
+    return "Unknown" unless voter_registration_status
+    VOTER_REGISTRATION_STATUS_TEXT[voter_registration_status.to_sym]
   end
 
   def phone_number_display
@@ -45,9 +41,5 @@ class Voter < ApplicationRecord
 
   def display_name
     "#{first_name.capitalize} #{last_name.capitalize}"
-  end
-
-  def household_members
-    Voter.where(household_id: household_id).where.not(sos_id: sos_id)
   end
 end

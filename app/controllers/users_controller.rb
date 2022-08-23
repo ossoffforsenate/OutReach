@@ -27,16 +27,17 @@ class UsersController < ApplicationController
   end
 
   def start_verification(to, channel='sms')
-    return # unless Rails.env.production?
-    channel = 'sms' unless ['sms', 'voice'].include? channel
-    verification = @client.verify.services(ENV['VERIFICATION_SID'])
-                          .verifications
-                          .create(:to => '+1' + to, :channel => channel)
-    verification.sid
+    unless Rails.env.development?
+      channel = 'sms' unless ['sms', 'voice'].include? channel
+      verification = @client.verify.services(ENV['VERIFICATION_SID'])
+                            .verifications
+                            .create(:to => '+1' + to, :channel => channel)
+      verification.sid
+    end
   end
 
   def check_verification(phone, code)
-    return true # unless Rails.env.production?
+    return true if Rails.env.development?
     begin
       verification_check = @client.verify.services(ENV['VERIFICATION_SID'])
                                   .verification_checks

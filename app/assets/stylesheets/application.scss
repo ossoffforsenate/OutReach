@@ -70,9 +70,9 @@ nav {
   max-height: 100%;
 }
 
-#ossoff-photo {
+#nittany-lion-photo {
   /* TODO: resize and optimize photo */
-  background-image: image-url('ossoff_photo.png');
+  background-image: image-url('nittany_lion_photo.png');
   position: absolute;
   bottom: 0;
   right: 0;
@@ -215,7 +215,7 @@ canvas#confetti-canvas {
 }
 
 @media only screen and (max-width: 1024px) {
-  #ossoff-photo {
+  #nittany-lion-photo {
     width: 40%;
   }
   .hero #user-name {
@@ -224,7 +224,7 @@ canvas#confetti-canvas {
 }
 
 @media only screen and (max-width: 768px) {
-  #ossoff-photo {
+  #nittany-lion-photo {
     display: none;
   }
   form#login-form .control.phone-number, form#login-form .input {
