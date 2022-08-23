@@ -19,11 +19,6 @@
           </p>
         </div>
       </div>
-      <div id="voter-facts" class="columns is-centered has-text-centered mt-4">
-        <div class="column is-narrow">
-          📝 Plan: <%= @voter.vote_plan || "Unavailable" %>
-        </div>
-      </div>
       <% if @voter.polling_place_display %>
         <div id="voter-polling-place" class="columns is-centered has-text-centered mt-1">
           <div class="column is-narrow">
@@ -101,7 +96,11 @@
                         </tr>
                         <tr>
                           <th>Vote Plan</th>
-                          <td style='border:none;'>Unavailable</td>
+                          <td style='border:none;'><%= @voter.vote_plan ?  @voter.vote_plan : "Unavailable"%></td>
+                        </tr>
+                        <tr>
+                          <th>Vote Status</th>
+                          <td style='border:none;'><%= @voter.vote_status ?  @voter.vote_status : "Unavailable"%></td>
                         </tr>
                         <tr>
                           <th>Contact Status</th>
@@ -130,6 +129,14 @@
                     <tr>
                       <th>Party ID</th>
                       <td style='border:none;'><%= f.select :party_id, options_for_select([ "Democrat", "Republican", "Independent", "Green", "Other" ], @voter.party_id) %></td>
+                    </tr>
+                    <tr>
+                      <th>Vote Plan</th>
+                      <td style='border:none;'><%= f.select :vote_plan, options_for_select([ "In person", "By mail"], @voter.vote_plan) %></td>
+                    </tr>
+                    <tr>
+                      <th>Vote Status</th>
+                      <td style='border:none;'><%= f.select :vote_status, options_for_select([ "Has not voted yet", "Voted in person", "Mail in ballot submitted"], @voter.vote_status) %></td>
                     </tr>
                     <tr>
                       <th>Notes</th>
@@ -199,6 +206,31 @@
         <div id="conversation-guide-wrapper">
           <p class="title">Conversation Guide</p>
           <div class="box content">
+           <p class="title mb-1">Registering to vote 💻</p>
+           <p>
+              <p><b>Monday, October 24th is the LAST day to register before the election!</b></p>
+              <p><b>Register at the following link: <a href="https://www.pavoterservices.pa.gov/pages/VoterRegistrationApplication.aspx" target="_blank">https://www.pavoterservices.pa.gov/pages/VoterRegistrationApplication.aspx</a></b></p>
+                <button class="button is-info is-small">
+                  <span class="icon is-small">
+                    <i class="fa fa-envelope"></i>
+                  </span>
+                  <a href="mailto:<%=@voter.email%>?subject=PA Voter Registration&body=Register at the following link: https://www.pavoterservices.pa.gov/pages/VoterRegistrationApplication.aspx" style="color:white;text-decoration:none"><span>Email link to voter</span></a>
+                </button>
+                <button class="button is-primary is-small">
+                  <span class="icon is-small">
+                    <i class="fa fa-mobile-alt"></i>
+                  </span>
+                  <a href="sms:<%=@voter.primary_phone_number%>?&body=Register at the following link: https://www.pavoterservices.pa.gov/pages/VoterRegistrationApplication.aspx" style="color:white;text-decoration:none"><span>Text link to voter</span></a>
+                </button><br><br>
+
+              <p><b>To register, you must</b></p>
+              <ul>
+                <li>Be a US Citizen at least 30 days before the next election</li>
+                <li>Be a resident of PA AND your election district for at least 30 days before the next election</li>
+                <li>Be at least 18 years of age</li>
+              </ul>
+            </p>
+
             <p class="title mb-1">Voting in-person on Tuesday, November 8th 🗳</p>
             <p>
               <p><b>Get your contact to commit to a plan to vote.</b></p>
@@ -259,7 +291,7 @@
               </p>
             </p>
 
-            <p class="title mb-1">Check out these resources! 💻</p>
+            <p class="title mb-1">Check out these resources! 🗂 </p>
             <p class="ml-4">
               <p>FIND POLLING PLACE: <a href="http://IWillVote.com" target="_blank">IWillVote.com</a></p>
               <p>TRACK YOUR BALLOT: <a href="https://www.pavoterservices.pa.gov/Pages/BallotTracking.aspx" target="_blank">PA SOS Ballot Tracker</a></p>
