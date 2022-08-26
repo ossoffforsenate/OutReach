@@ -65,6 +65,6 @@ class Voter < ApplicationRecord
   end
 
   def display_name
-    "#{first_name.capitalize} #{last_name.capitalize}"
+    "#{first_name.capitalize} #{last_name.present? ? last_name.capitalize : "" }"
   end
 end
