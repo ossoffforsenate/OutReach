@@ -2,6 +2,8 @@
 require 'json'
 
 class AdminController < ApplicationController
+  helper_method :get_network_size_by_user
+
   def show
     current_user.log_voter!(params[:id].to_s)
     @voter = Voter.find(params[:id])
@@ -11,6 +13,7 @@ class AdminController < ApplicationController
     @users = User.all
     @user_set = User.first(3)
     @voters = Voter.all
+    @relationships = Relationship.all
 
     @confirmed_registrations = @voters.select {|v| v.voter_registration_status_display == "Registered in PA HD 82"}.count
     @pending_registrations = @voters.select {|v| v.voter_registration_status_display == "Pending registration in PA HD 82"}.count
@@ -33,4 +36,9 @@ class AdminController < ApplicationController
     survey_data = [cares_climate, cares_gun_control, cares_healthcare, cares_college_affordability, cares_reproductive_rights, cares_transparency, cares_marijuana, cares_gender_equity, cares_sexual_assault]
     @sorted_survey_data = survey_data.sort_by { |issue| issue.values.first }.reverse
   end
+
+  def get_network_size_by_user
+    return 
+  end
+
 end

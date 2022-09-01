@@ -88,26 +88,55 @@
         </tbody>
     </table>
   </div>
-
-  <p id="top-issues" class="title is-size-3-desktop is-size-4-tablet is-size-5-mobile is-uppercase has-text-weight-normal mb-0">
-  Top Student Issues
-  </p><br>
-    <div class="table-container">
-    <table class="table is-half-width">
-        <thead>
-        <tr>
-            <th>Issue</th>
-            <th>Responses</th>
-        </tr>
-        </thead>
-        <tbody>
-            <% @sorted_survey_data.each_with_index do |issue| %>
-            <tr>
-                <td class="nowrap"><%= issue.keys.first %></td>
-                <td><%= issue.values.first %></td> 
-            </tr>
-            <% end %>
-        </tbody>
-    </table>
-    </div>
+ 
+    <div class="container">
+        <div class="columns is-multiline">
+            <div class="column column is-full-tablet is-half-desktop">
+                <p id="top-issues" class="title is-size-3-desktop is-size-4-tablet is-size-5-mobile is-uppercase has-text-weight-normal mb-0">
+                Top Student Issues
+                </p><br>
+                <div class="table-container">
+                    <table class="table is-half-width">
+                        <thead>
+                        <tr>
+                            <th>Issue</th>
+                            <th>Responses</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <% @sorted_survey_data.each_with_index do |issue| %>
+                            <tr>
+                                <td class="nowrap"><%= issue.keys.first %></td>
+                                <td><%= issue.values.first %></td> 
+                            </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="column column is-full-tablet is-half-desktop">
+                <p id="top-issues" class="title is-size-3-desktop is-size-4-tablet is-size-5-mobile is-uppercase has-text-weight-normal mb-0">
+                Individual SRO Stats
+                </p><br>
+                <div class="table-container">
+                    <table class="table is-half-width">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Network size</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <% @users.each_with_index do |user| %>
+                            <tr>
+                                <td class="nowrap"><%= user.display_name %></td>
+                                <td><%= @relationships.select {|r| r.user_id == user.id}.count %></td>                             </tr>
+                            <% end %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div> 
 </section>
