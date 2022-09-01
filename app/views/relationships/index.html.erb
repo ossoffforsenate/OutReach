@@ -10,45 +10,45 @@
       </div>
       <div class="columns is-centered has-text-centered">
         <div class="column is-half-tablet is-narrow-mobile">
-          <a href="<%= voter_next_path %>" class="button is-primary is-link is-size-4-tablet is-size-6-mobile">Start Contacting Your Network</a>
+          <a href="<%= voter_next_path %>" class="button is-primary is-link is-size-5-tablet is-size-7-mobile">Start Contacting Your Network</a>
         </div>
+        <% if current_user.is_admin %>
+          <div class="column is-half-tablet is-narrow-mobile" >
+            <a href="<%= show_dashboard_path %>" class="button is-primary is-link is-size-5-tablet is-size-7-mobile">View Admin Dashboard</a>
+          </div>
+        <% end %>
       </div>
     </div>
   </div>
 </section>
 
 <section id="user-stats" class="section">
-  <div class="container">
-    <div class="columns">
-      <div class="column">
-        <p class="title">
-          Your Stats
-        </p>
+  <nav class="level">
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:royalblue">Total Contacts</p>
+        <p class="title" style="color:royalblue"><%= @contacts.size %></p>
       </div>
     </div>
-    <div class="columns">
-      <div class="column">
-        <div class="box user-stat">
-          <p class="title stat-value">
-            <%= @contacts.size %>
-          </p>
-          <p class="subtitle stat-label">
-            Direct contact<%= @contacts.size != 1 ? "s" : "" %>
-          </p>
-        </div>
-      </div>
-      <div class="column">
-        <div class="box user-stat">
-          <p class="title">
-            <%= @contacted_size %>
-          </p>
-          <p class="subtitle stat-label">
-            Voter<%= @contacted_size != 1 ? "s" : "" %> contacted
-          </p>
-        </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:green">Confirmed registrations</p>
+        <p class="title" style="color:green"><%= @contacts.select {|c| c.voter_registration_status_display == "Registered in PA HD 82"}.count%></p>
       </div>
     </div>
-  </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:orange">Pending registrations</p>
+        <p class="title" style="color:orange"><%= @contacts.select {|c| c.voter_registration_status_display == "Pending registration in PA HD 82"}.count%></p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:crimson">Unregistered voters</p>
+        <p class="title" style="color:crimson"><%= @contacts.select {|c| c.voter_registration_status_display != "Pending registration in PA HD 82" && c.voter_registration_status_display != "Registered in PA HD 82"}.count%></p>
+      </div>
+    </div>
+  </nav>
 </section>
 
 <section id="contacts" class="section">

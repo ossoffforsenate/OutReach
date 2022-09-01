@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   get 'verify', to: 'users#verify', as: 'verify'
   post 'verify', to: 'users#verify'
 
+  get 'show_dashboard', to: 'admin#show_dashboard', as: 'show_dashboard'
+  get 'show_dashboard', to: 'admin#show_dashboard'
+
   get 'imports', to: 'imports#index'
   post 'imports', to: 'imports#create'
 end
