@@ -1,0 +1,116 @@
+<section class="hero is-link">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <div class="column is-half-tablet is-narrow-mobile">
+          <p id="user-name" class="title is-size-1-desktop is-size-2-tablet is-size-3-mobile is-uppercase has-text-weight-normal mb-0">
+            Admin Dashboard
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="all-stats" class="section">
+  <nav class="level">
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:navy">Total SROs</p>
+        <p class="title" style="color:navy"><%= @users.size %></p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:royalblue">Total contacts</p>
+        <p class="title" style="color:royalblue"><%= @voters.count %></p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:purple">Average network size</p>
+        <p class="title" style="color:purple"><%= @voters.count/@users.count %></p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:green">Confirmed registrations</p>
+        <p class="title" style="color:green"><%= @confirmed_registrations %></p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:orange">Pending registrations</p>
+        <p class="title" style="color:orange"><%= @pending_registrations %></p>
+      </div>
+    </div>
+    <div class="level-item has-text-centered">
+      <div>
+        <p style="color:crimson">Unregistered contacts</p>
+        <p class="title" style="color:crimson"><%= @unregistered %></p>
+      </div>
+    </div>
+  </nav>
+  <div class="table-container">
+    <table class="table is-fullwidth">
+        <thead>
+            <tr>
+                <th>Confirmed/Approximate</th>
+                <th>Total</th>
+                <th>Progress (goal: 3,500 registrations)</th>
+            </tr>
+        </thead>
+        <tbody>
+            <td>
+                Approximate (includes pending registrations)
+            </td>
+            <td>
+                <%= @total_unofficial_registrations %>
+            </td>
+            <td style="width:70%">
+                <progress class="progress is-info" value=<%= @total_unofficial_registrations %> max="3500"></progress>
+            <td>
+        </tbody>
+        <tbody>
+            <td>
+                Confirmed
+            </td>
+            <td>
+                <%= @confirmed_registrations %>
+            </td>
+            <td style="width:70%">
+                <progress class="progress is-success" value=<%= @confirmed_registrations %> max="2900"></progress>
+            <td>
+        </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="user-stats" class="section">
+    <div class="table-container">
+        <table class="table is-fullwidth">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Total Contacts</th>
+                <th>Approximate Registrations</th>
+                <th>Confirmed Registrations</th>
+                <th>Pending Registraitons</th>
+            </tr>
+            </thead>
+            <tbody>
+                <% @users.each_with_index do |u| %>
+                    <tr>
+                        <td>
+                            <%= u.display_name %>
+                        </td>
+                        <td class="nowrap"><%= u.non_self_voters.count %></td>
+                        <td>test</td> <!-- does it defualt to an empty string anyway?-->
+                        <td>test</td>
+                        <td>test</td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+</section>
