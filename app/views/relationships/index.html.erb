@@ -9,13 +9,16 @@
         </div>
       </div>
       <div class="columns is-centered has-text-centered">
-        <div class="column is-half-tablet is-narrow-mobile">
-          <a href="<%= voter_next_path %>" class="button is-primary is-link is-size-5-tablet is-size-7-mobile">Start Contacting Your Network</a>
+        <div class="column is-third-tablet is-narrow-mobile">
+          <a href="<%= voter_next_path %>" class="button is-primary is-link is-size-5-tablet is-size-7-mobile">Contact Network</a>
         </div>
         <% if current_user.is_admin %>
-          <div class="column is-half-tablet is-narrow-mobile" >
-            <a href="<%= show_dashboard_path %>" class="button is-primary is-link is-size-5-tablet is-size-7-mobile">View Admin Dashboard</a>
-          </div>
+        <div class="column is-third-tablet is-narrow-mobile" >
+          <a href="<%= show_dashboard_path %>" class="button is-primary is-link is-size-5-tablet is-size-7-mobile">View Dashboard</a>
+        </div>
+        <div class="column is-third-tablet is-narrow-mobile" >
+          <a href="<%= imports_path %>" class="button is-primary is-link is-size-5-tablet is-size-7-mobile">Import Reach Data</a>
+        </div>
         <% end %>
       </div>
     </div>
