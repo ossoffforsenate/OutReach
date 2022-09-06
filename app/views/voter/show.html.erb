@@ -1,17 +1,6 @@
 <section class="hero is-link">
   <div class="hero-body">
     <div class="container">
-      <% if @same_household_voter %>
-        <div id="household-voter" class="columns is-centered has-text-centered">
-          <div class="column is-narrow">
-            <span class="box has-text-white mini-info is-rounded">
-              <a id="household-badge" href="<%= voter_path @same_household_voter %>">
-                🏡&nbsp;<b><%= @same_household_voter.display_name %></b>'s household member
-              </a>
-            </span>
-          </div>
-        </div>
-      <% end %>
       <div class="columns is-centered has-text-centered">
         <div class="column is-half-tablet is-narrow-mobile">
           <p id="voter-name" class="title is-uppercase is-1 has-text-weight-normal mb-0">
@@ -21,18 +10,13 @@
       </div>
       <div class="columns is-centered has-text-centered">
         <div class="column is-half-tablet is-narrow-mobile">
-          <p id="voter-phone" class="subtitle is-2"><%= @voter.phone_number_display %></p>
-        </div>
-      </div>
-      <div id="voter-facts" class="columns is-centered has-text-centered mt-4">
-        <div class="column is-narrow">
-          📆 Vote Status: <%= @voter.voting_status_display || "Unavailable" %>
-        </div>
-        <div class="column is-narrow">
-          📝 Plan: <%= @voter.vote_plan || "Unavailable" %>
-        </div>
-        <div class="column is-narrow">
-          🗳 Voted in general election: <%= @voter.voted_general ? 'Yes' : 'No'  %>
+          <p id="voter-phone" class="subtitle is-2">
+            <% if @voter.primary_phone_number %>
+              <%= link_to @voter.phone_number_display, "tel:#{@voter.primary_phone_number}" %>
+            <% else %>
+              No phone number given
+            <% end %>
+          </p>
         </div>
       </div>
       <% if @voter.polling_place_display %>
@@ -52,24 +36,15 @@
   <div class="container">
     <div class="columns is-multiline is-centered is-mobile">
       <div class="column is-narrow">
-        <div class="button is-medium is-light">
-          <%= form_with url: voter_path(@voter), method: :patch do |f| %>
-            <%= hidden_field_tag :is_needs_a_ride_form, true %>
-            <%= check_box_tag :needs_a_ride, "1", @voter.needs_a_ride, onChange: "this.form.submit()" %>
-            <%= label_tag :needs_a_ride, "#{@voter.first_name.capitalize} needs a ride to the polls" %>
-          <% end %>
-        </div>
-      </div>
-      <div class="column is-narrow">
-        <%= form_tag voter_path(@voter), method: :patch do %>
-          <%= hidden_field_tag :last_call_status, "should_call_again" %>
-          <%= submit_tag "Mark to contact again", class: "button is-medium is-info is-light" %>
+        <%= form_for @voter do |f| %>
+          <%= f.hidden_field :last_call_status, value: "should_call_again" %><!-- CHANGE THIS TO CONTACT AGAIN -->
+          <%= f.submit "Mark to contact again", class: "button is-medium is-info is-light" %>
         <% end %>
       </div>
       <div class="column is-narrow">
-        <%= form_tag voter_path(@voter), method: :patch do %>
-          <%= hidden_field_tag :last_call_status, "do_not_call" %>
-          <%= submit_tag "Don't contact again", class: "button is-medium is-warning is-light" %>
+        <%= form_for @voter do |f| %>
+          <%= f.hidden_field :last_call_status, value: "do_not_call" %><!-- CHANGE THIS TO DO NOT CONTACT -->
+          <%= f.submit "Don't contact again", class: "button is-medium is-warning is-light" %>
         <% end %>
       </div>
       <div class="column is-narrow">
@@ -84,14 +59,181 @@
 <section class="section">
   <div class="container">
     <div class="columns is-multiline">
+      <div class="column column is-full-tablet is-half-desktop">
+          <div id="voter-profile">
+              <div id="voter-profile-info">
+                <p class="title"><%= @voter.first_name.capitalize %>'s Profile</p>
+                <div class="box contacts">
+                  <div class="table-container">
+                    <table class="table is-fullwidth">
+                        <tr>
+                          <th>Number</th>
+                          <td style='border:none;'>
+                            <% if @voter.primary_phone_number %>
+                              <%= link_to @voter.phone_number_display, "tel:#{@voter.primary_phone_number}" %>
+                            <% else %>
+                              No phone number given
+                            <% end %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>Email</th>
+                          <td style='border:none;'>
+                            <% if @voter.email %>
+                              <%= link_to @voter.email, "mailto:#{@voter.email}" %>
+                            <% else %>
+                              No email given
+                            <% end %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <th>Registration</th>
+                          <td style='border:none;'><%= @voter.voter_registration_status ? @voter.voter_registration_status_display : "Unavailable "%></tr>
+                        </tr>
+                        <tr>
+                          <th>Voted in 2020</th>
+                          <td style='border:none;'>Unavailable</td>
+                        </tr>
+                        <tr>
+                          <th>Vote Plan</th>
+                          <td style='border:none;'><%= @voter.vote_plan ?  @voter.vote_plan : "Unavailable"%></td>
+                        </tr>
+                        <tr>
+                          <th>Vote Status</th>
+                          <td style='border:none;'><%= @voter.vote_status ?  @voter.vote_status : "Unavailable"%></td>
+                        </tr>
+                        <tr>
+                          <th>Contact Status</th>
+                          <td style='border:none;'><%= @voter.last_call_status_display %></td>
+                        </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+          </div>
+
+          <div id="edit-voter-profile" style="padding-top: 10px;">
+            <div id="edit-voter-profile-info">
+              <div class="box contacts">
+                <%= form_for @voter do |f| %>
+                <div class="table-container">
+                  <table class="table is-fullwidth">
+                    <tr>
+                      <th>Enter email</th>
+                      <td style='border:none;'><%= f.email_field :email, class: "input"%></td>
+                    </tr>
+                    <tr>
+                      <th>Registration status</th>
+                      <td style='border:none;'><%= f.select :voter_registration_status, options_for_select(Voter.voter_registration_statuses.map {|k, v| [k.titleize, Voter.voter_registration_statuses.key(v)]}, @voter.voter_registration_status) %></td>
+                    </tr>
+                    <tr>
+                      <th>Party ID</th>
+                      <td style='border:none;'><%= f.select :party_id, options_for_select([ "Democrat", "Republican", "Independent", "Green", "Other" ], @voter.party_id) %></td>
+                    </tr>
+                    <tr>
+                      <th>Vote Plan</th>
+                      <td style='border:none;'><%= f.select :vote_plan, options_for_select([ "In person", "By mail"], @voter.vote_plan) %></td>
+                    </tr>
+                    <tr>
+                      <th>Vote Status</th>
+                      <td style='border:none;'><%= f.select :vote_status, options_for_select([ "Has not voted yet", "Voted in person", "Mail in ballot submitted"], @voter.vote_status) %></td>
+                    </tr>
+                    <tr>
+                      <th>Notes</th>
+                      <td style='border:none;'><%= f.text_area :notes, class: "textarea", placeholder: "Place notes here", style: "margin-top: 10px;" %></td>
+                    </tr>
+                  </table>
+                  <%= f.submit "Save changes", class:"button is-active is-success is-medium is-light", style: "margin-top: 10px;" %>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div id="survey-voter-data" style="padding-top: 10px;">
+            <div id="survey-voter-data-info">
+              <div class="box contacts">
+                <%= form_tag voter_path(@voter) + "/update_survey", id:"survey-form" do %>
+                  <th><b>What issues are most important to you?</b></th>
+                  <td style='border:none;'>
+                  <br>
+                  <%= check_box_tag :cares_about_climate, @voter.safe_survey_data["issues"]["cares_climate"], @voter.safe_survey_data["issues"]["cares_climate"] == "1" ? true : false %>
+                  <%= label :cares_about_climate, "Climate change", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_gun_control, @voter.safe_survey_data["issues"]["cares_gun_control"], @voter.safe_survey_data["issues"]["cares_gun_control"] == "1" ? true : false %>
+                  <%= label :cares_about_gun_control, "Gun control", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_healthcare, @voter.safe_survey_data["issues"]["cares_healthcare"], @voter.safe_survey_data["issues"]["cares_healthcare"] == "1" ? true : false %>
+                  <%= label :cares_about_healthcare, "Healthcare", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_college_affordability, @voter.safe_survey_data["issues"]["cares_college_affordability"], @voter.safe_survey_data["issues"]["cares_college_affordability"] == "1" ? true : false %>
+                  <%= label :cares_about_college_affordability, "College affordability", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_reproductive_rights, @voter.safe_survey_data["issues"]["cares_reproductive_rights"], @voter.safe_survey_data["issues"]["cares_reproductive_rights"] == "1" ? true : false %>
+                  <%= label :cares_about_reproductive_rights, "Reproductive rights", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_transparency, @voter.safe_survey_data["issues"]["cares_transparency"], @voter.safe_survey_data["issues"]["cares_transparency"] == "1" ? true : false %>
+                  <%= label :cares_about_transparency, "Accountability/transparency of govt officials", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_marijuana, @voter.safe_survey_data["issues"]["cares_marijuana"], @voter.safe_survey_data["issues"]["cares_marijuana"] == "1" ? true : false %>
+                  <%= label :cares_about_marijuana, "Marijuana legalization/Expungement of Records", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_gender_equity, @voter.safe_survey_data["issues"]["cares_gender_equity"], @voter.safe_survey_data["issues"]["cares_gender_equity"] == "1" ? true : false %>
+                  <%= label :cares_about_gender_equity, "Gender equity/Title IX", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_gender_pay_gap, @voter.safe_survey_data["issues"]["cares_pay_gap"], @voter.safe_survey_data["issues"]["cares_pay_gap"] == "1" ? true : false %>
+                  <%= label :cares_about_gender_pay_gap, "Gender pay gap", class: "tag is-info"%>
+                  <br>
+                  <%= check_box_tag :cares_about_sexual_assault, @voter.safe_survey_data["issues"]["cares_sexual_assault"], @voter.safe_survey_data["issues"]["cares_sexual_assault"] == "1" ? true : false %>
+                  <%= label :cares_about_sexual_assault, "Sexual assault/violence", class: "tag is-info"%>
+                  <br>
+                  <th><b>Check this box if the voter was planning on voting in November prior to you reaching out to them:</b></th>
+                  <td style='border:none;'>
+                  <%= check_box_tag :planned_to_vote_before, @voter.safe_survey_data["plan_to_vote_before"], @voter.safe_survey_data["plan_to_vote_before"] == "1" ? true : false %>
+                  <br>
+                  <th><b>If the voter was planning on voting this November, check this box if they were planning on voting for Paul:</b></th>
+                  <td style='border:none;'>
+                  <%= check_box_tag :planned_to_vote_for_paul, @voter.safe_survey_data["plan_to_vote_for_paul"], @voter.safe_survey_data["plan_to_vote_for_paul"] == "1" ? true : false %>
+                  <br>
+                  <%= submit_tag "Submit survey data", class:"button is-active is-success is-medium is-light", style: "margin-top: 10px;" %>
+                <% end %>
+              </div>
+            </div>
+          </div>
+      </div>
+
       <div class="column is-full-tablet is-half-desktop">
         <div id="conversation-guide-wrapper">
           <p class="title">Conversation Guide</p>
           <div class="box content">
-            <p class="title mb-1">Voting in-person on Tuesday</p>
-            <p class="subtitle mb-1 mt-1">Goal</p>
-            <p class="ml-4">
-              Get contact to commit to a plan to vote.
+           <p class="title mb-1">Registering to vote 💻</p>
+           <p>
+              <p><b>Monday, October 24th is the LAST day to register before the election!</b></p>
+              <p><b>Register at the following link: <a href="https://www.pavoterservices.pa.gov/pages/VoterRegistrationApplication.aspx" target="_blank">https://www.pavoterservices.pa.gov/pages/VoterRegistrationApplication.aspx</a></b></p>
+                <button class="button is-info is-small">
+                  <span class="icon is-small">
+                    <i class="fa fa-envelope"></i>
+                  </span>
+                  <a href="mailto:<%=@voter.email%>?subject=PA Voter Registration&body=Register at the following link: https://www.pavoterservices.pa.gov/pages/VoterRegistrationApplication.aspx" style="color:white;text-decoration:none"><span>Email link to voter</span></a>
+                </button>
+                <button class="button is-primary is-small">
+                  <span class="icon is-small">
+                    <i class="fa fa-mobile-alt"></i>
+                  </span>
+                  <a href="sms:<%=@voter.primary_phone_number%>?&body=Register at the following link: https://www.pavoterservices.pa.gov/pages/VoterRegistrationApplication.aspx" style="color:white;text-decoration:none"><span>Text link to voter</span></a>
+                </button><br><br>
+
+              <p><b>To register, you must</b></p>
+              <ul>
+                <li>Be a US Citizen at least 30 days before the next election</li>
+                <li>Be a resident of PA AND your election district for at least 30 days before the next election</li>
+                <li>Be at least 18 years of age</li>
+              </ul>
+            </p>
+
+            <p class="title mb-1">Voting in-person on Tuesday, November 8th 🗳</p>
+            <p>
+              <p><b>Get your contact to commit to a plan to vote.</b></p>
               <ul>
                 <li>Make sure they know their polling place</li>
                 <li>What time will they go to the polls?</li>
@@ -100,121 +242,64 @@
               </ul>
             </p>
 
-            <p class="subtitle mb-1">Key Info</p>
+            <p><b>Key Info</b></p>
             <p class="ml-4">
               <ul>
-                <li>Election Day is on Tuesday, January 5.</li>
-                <li>Polls are open 7 AM - 7 PM.</li>
+                <li>Election Day is on <b>Tuesday, November 8.</b></li>
+                <li>Polls are open <b>7 AM - 7 PM.</b></li>
                 <li>Bring photo ID</li>
-                <li>Find your polling place at IWillVote.com.</li>
+                <li>Find your polling place at <a href="https://www.pavoterservices.pa.gov/Pages/PollingPlaceInfo.aspx" target="_blank">PA Voter Services</a></li>
               </ul>
             </p>
 
-            <p class="title mb-1">What do I need to bring with me to the polls?</p>
-            <p class="ml-4">Just yourself, your photo ID and your mask!</p>
-
-            <p class="title mb-1">What works as an ID?</p>
+            <p class="title mb-1">What works as an ID? 📂</p>
             <p class="ml-4">
-              Any of these IDs will work. If you have questions, call the Voter Hotline: 888-730-5816.
+              <b>All you need to bring to the polls is yourself and a photo ID!</b> Any of these IDs will work. You can also find this information by clicking <a href ="https://www.vote.pa.gov/Register-to-Vote/Pages/Voter-ID-for-First-Time-Voters.aspx" target="_blank">here.</a>
               <ul>
-                <li><b>A Georgia Driver’s License</b>, even if it’s expired</li>
-                <li><b>Valid U.S. passport ID</b></li>
-                <li>
-                  <b>Any valid state or federal government issued photo ID</b>,
-                  including a free ID Card issued by your county registrar’s office
-                  or the Georgia Department of Driver Services (DDS)
-                </li>
-                <li><b>Valid employee photo ID</b> from any branch, department, agency, or entity of the U.S. Government, Georgia, or any county, municipality, board, authority or other entity of this state</li>
-                <li><b>Valid U.S. military photo ID</b></li>
-                <li><b>Valid tribal photo ID</b></li>
-                <li><b>A student ID with photo</b> from a <b>public</b> (but not private!) <b>college, university, or technical college.</b></li>
+                <li>A Pennsylvania's driver license or PennDOT ID Card</li>
+                <li>ID issued by any Commonwealth agency</li>
+                <li>ID issued by the US Government</li>
+                <li>U.S. Passport</li>
+                <li>U.S. Armed Forces ID</li>
+                <li>Student ID</li>
+                <li>Employee ID</li>
+              </ul>
+
+              If you do not have a photo ID, you can use a non-photo identification that includes your name and address
+              <ul>
+                <li>Confirmation issued by the County Voter Registration Office</li>
+                <li>Non-photo ID issued by the Commonwealth</li>
+                <li>ID issued by the US Government</li>
+                <li>Firearm permit</li>
+                <li>Current utility bill</li>
+                <li>Current bank statement</li>
+                <li>Current paycheck</li>
+                <li>Government paycheck</li>
               </ul>
             </p>
-            <p class="title mb-1">How should I return my absentee ballot?</p>
-            <p class="mb-4">
+            <p class="title mb-1">Mail In Ballots 📬</p>
+            <p class="ml-4">
               <ul>
                 <li>
-                  It's too late to mail it in. Instead, you should <b>drop it in an official dropbox in your county.</b>
+                  <b>You're allowed to vote by mail in Pennsylvania for ANY reason!</b> Request a mail in ballot by clicking <a href="https://www.pavoterservices.pa.gov/OnlineAbsenteeApplication/#/OnlineAbsenteeBegin" target="_blank">here</a>
                 </li>
-                <li>Your ballot must be <b><i>received</i></b> by 7PM today (Tuesday, Jan. 5).</li>
-                <li>A few counties don't have a drop box, but you can drop it off at the county elections office before they close on Tuesday.</li>
+                <li>You can return completed mail-in ballots in <b>USPS mailboxes</b>, or drop it in an <b>official dropbox in your county.</b></li>
+                <li>Your ballot must be <b><i>received</i></b> by <b>7PM, Tuesday. November 8th.</b></li>
               </ul>
               <p>
-                <b>→ FIND A DROPBOX:</b> <a href="http://ossoff.win/dropbox" target="_blank">ossoff.win/dropbox</a><br/>
+                <b>→ FIND A DROPBOX:</b> TBD<br/>
               </p>
             </p>
 
-            <p class="title mb-1">How can I get a ride to my polling place or dropbox?</p>
-            <p class="ml-4">
-              <p>Check out these resources!</p>
-              <ul>
-                <li><a href="https://www.ridestotherunoff.com" target="_blank">ridetotherunoff.com</a></li>
-                <li><b>Uber</b> is offering  free roundtrip rides to polls or dropboxes with voucher code <b>"VoteGA"</b></li>
-                <li>Call or text 1-800-590-VOTE or the New GA Project 1-800-874-1541</li>
-                <li><b>Georgia ADAPT</b> provides accessible rides statewide for voters with disabilities. To request your ride, <b><a target="_blank" href="https://docs.google.com/forms/d/1vAyewYpU2sAVEc44Zzhfdj-bPiM4_xBOglr2qDdjdqM/viewform?ts=5fcb145f&edit_requested=true&gxids=7628">fill out this form.</a></b></li>
-              </ul>
-            </p>
-
-            <p class="title mb-1">Helpful Links</p>
+            <p class="title mb-1">Check out these resources! 🗂 </p>
             <p class="ml-4">
               <p>FIND POLLING PLACE: <a href="http://IWillVote.com" target="_blank">IWillVote.com</a></p>
-              <p>TRACK YOUR BALLOT: <a href="http://ossoff.win/track-ballot " target="_blank">ossoff.win/track-ballot </a></p>
-              <p>DETAILS ON VOTING YOUR BALLOT: <a href="http://ossoff.win/absentee-details " target="_blank">ossoff.win/absentee-details </a></p>
-              <p>FIND A DROPBOX: <a href="http://ossoff.win/dropbox" target="_blank">ossoff.win/dropbox</a></p>
-              <p>HOTLINE: <a href="tel:888-730-5816" target="_blank">888-730-5816</a></p>
-              <p>ACCEESSIBLE VOTER TEXTLINE: <a href="tel:833-566-1212">833-566-1212</a></p>
-              <p>VOTER FAQ: <a href="http://electjon.com/faq " target="_blank">electjon.com/faq</a></p>
+              <p>TRACK YOUR BALLOT: <a href="https://www.pavoterservices.pa.gov/Pages/BallotTracking.aspx" target="_blank">PA SOS Ballot Tracker</a></p>
+              <p>DETAILS ON VOTING YOUR BALLOT: TBD</p>
+              <p>FIND A DROPBOX: TBD</p>
+              <p>CENTRE COUNTY ELECTIONS OFFICE: <a href="tel:814-355-6703" target="_blank">814-355-6703</a> or <a mailto="tel:814-355-6703" target="_blank">elections@centrecountypa.gov</a></p>
+              <p>VOTER FAQ: <a href="https://www.vote.pa.gov/Voting-in-PA/Pages/Elections-FAQs.aspx" target="_blank">PA SOS FAQ</a></p>
             </p>
-          </div>
-        </div>
-      </div>
-
-      <div class="column column is-full-tablet is-half-desktop">
-        <div id="household" class="columns">
-          <div class="column">
-            <div id="household-members">
-              <p class="title">Other members of <%= @voter.first_name.capitalize %>'s household</p>
-              <div id="bonus" class="mb-4">
-                <p>
-                  ✨ Bonus ✨ Call these people as well to increase our votes!
-                </p>
-              </div>
-              <div class="box contacts">
-                <div class="table-container">
-                  <table class="table is-fullwidth">
-                    <thead>
-                      <tr>
-                        <th>Name</th>
-                        <th>Number</th>
-                        <th>Vote Status</th>
-                        <th class="has-text-centered">Voted in November</th>
-                        <th>Vote plan</th>
-                        <th>Call Status</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <% if @voter.household_members.empty? %>
-                        <tr class="has-text-centered is-light p-5">
-                          <td colspan="6">No household members.</td>
-                        </tr>
-                      <% end %>
-                      <% @voter.household_members.each do |v| %>
-                        <tr>
-                          <td>
-                            <%= link_to v.display_name, voter_path(v) %>
-                          </td>
-                          <td><%= v.phone_number_display %></td>
-                          <td><%= v.voting_status_display || "Unavailable" %></td>
-                          <td class="has-text-centered"><%= v.voted_general ? '✅' : '❌' %></td>
-                          <td><%= v.vote_plan || "Unavailable" %></td>
-                          <td><%= v.last_call_status_display %></td>
-                        </tr>
-                      <% end %>
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
       </div>

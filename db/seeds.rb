@@ -74,30 +74,22 @@ User.all.each do |user|
   loop do
     begin
       Voter.create!(
+        reach_id: user.id,
+        sos_id: rand(10000..100000),
+
         last_name: user.last_name,
         first_name: user.first_name,
         middle_name: Faker::Name.middle_name,
         age: rand(18..100),
         gender: Faker::Gender.type,
+
         primary_phone_number: user.phone_number,
         voting_street_address: Faker::Address.street_address,
         voting_city: Faker::Address.city,
         voting_zip: Faker::Address.zip_code,
+        voting_state: "PA",
+
         support_score: support_scores.sample,
-        vote_plan: vote_plans.sample,
-        voting_status: vote_statuses.sample,
-        voted_general: rand(0..1) == 0,
-        gotv_score: rand(),
-        household_id: rand(1000..7000),
-        sos_id: rand(10000..100000),
-        tier: rand(1..4),
-        tier_raw: rand(1..4),
-        voted: rand(0..1) == 0,
-        vote_location_name: Faker::Company.name,
-        vote_location_address: Faker::Address.street_address,
-        vote_location_city: Faker::Address.city,
-        vote_location_hours: '7am-7pm',
-        vote_location_zip: Faker::Address.zip_code,
       )
       break
     rescue ActiveRecord::RecordNotUnique
@@ -110,28 +102,22 @@ end
   loop do
     begin
       Voter.create!(
+        reach_id: random_user_id,
+        sos_id: rand(10000..100000),
+
         last_name: Faker::Name.last_name,
         first_name: Faker::Name.first_name,
         middle_name: Faker::Name.middle_name,
         age: rand(18..100),
         gender: Faker::Gender.type,
-        primary_phone_number: Faker::PhoneNumber.phone_number,
+
+        primary_phone_number: PhoneNumberUtils.normalize(Faker::PhoneNumber.phone_number)[0..9],
         voting_street_address: Faker::Address.street_address,
         voting_city: Faker::Address.city,
         voting_zip: Faker::Address.zip_code,
+        voting_state: "PA",
+
         support_score: support_scores.sample,
-        vote_plan: vote_plans.sample,
-        voting_status: vote_statuses.sample,
-        voted_general: rand(0..1) == 0,
-        gotv_score: rand(),
-        household_id: rand(1000..7000),
-        sos_id: rand(10000..100000),
-        tier: rand(1..4),
-        vote_location_name: Faker::Company.name,
-        vote_location_address: Faker::Address.street_address,
-        vote_location_city: Faker::Address.city,
-        vote_location_hours: '7am-7pm',
-        vote_location_zip: Faker::Address.zip_code,
       )
       break
     rescue ActiveRecord::RecordNotUnique
@@ -145,7 +131,7 @@ User.all.each do |user|
   begin
     Relationship.create!(
       user_id: user.id,
-      voter_sos_id: voter.sos_id,
+      voter_reach_id: voter.reach_id,
       relationship: "Me",
     )
   rescue
@@ -156,10 +142,10 @@ User.all.each do |user|
     begin
       Relationship.create!(
         user_id: user.id,
-        voter_sos_id: Voter.all.sample.sos_id,
+        voter_reach_id: Voter.all.sample.reach_id,
         relationship: "Friend",
       )
-    rescue
+    rescue ActiveRecord::RecordNotUnique
       puts "re-creating due to unique constrant violation..."
     end
   end

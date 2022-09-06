@@ -1,42 +1,63 @@
 # frozen_string_literal: true
+require 'json'
 
 class Voter < ApplicationRecord
-  self.primary_key = :sos_id
+  self.primary_key = :reach_id
 
-  has_many :relationships, foreign_key: :voter_sos_id
+  has_many :relationships, foreign_key: :voter_reach_id
   has_many :users, through: :relationships
 
   enum last_call_status: [ :not_yet_called, :should_call_again, :do_not_call ]
+  enum voter_data_status: [:reach_match, :manual_match, :unmatched]
+  enum voter_registration_status: [:registered_in_district, :pending_registration_in_district, :registered_in_state, :registered_out_of_state, :unregistered]
 
   CALL_STATUS_TEXT = {
-    not_yet_called: "Not called",
-    should_call_again: "Should call again",
-    do_not_call: "Don't call back",
+    not_yet_called: "Not contacted",
+    should_call_again: "Should contact again",
+    do_not_call: "Don't contact again",
   }.freeze
 
-  VOTE_STATUS_TEXT = {
-    "ballot mailed" => "Needs to Return Ballot",
-    "ballot received" => "Has Voted!",
+  VOTER_REGISTRATION_STATUS_TEXT = {
+    registered_in_district: "Registered in PA HD 82",
+    pending_registration_in_district: "Pending registration in PA HD 82",
+    registered_in_state: "Registered in PA",
+    registereted_out_of_state: "Registered out of state",
+    unregistered: "Unregistered"
+  }.freeze
+
+  DEFAULT_SURVEY_STRUCTURE = 
+  {
+    "issues" => {
+      "cares_climate" => "0",
+      "cares_gun_control" => "0",
+      "cares_healthcare" => "0",
+      "cares_college_affordability" => "0",
+      "cares_reproductive_rights" => "0",
+      "cares_transparency" => "0",
+      "cares_marijuana" => "0",
+      "cares_gender_equity" => "0",
+      "cares_pay_gap" => "0",
+      "cares_sexual_assault" => "0"
+    },
+    "plan_to_vote_before" => "0",
+    "plan_to_vote_for_paul" => "0"
   }.freeze
 
   def last_call_status_display
     CALL_STATUS_TEXT.fetch(last_call_status.to_sym, "Unknown")
   end
 
-  def polling_place_display
-    if vote_location_address.present?
-      display = ""
-      display += "#{vote_location_name.titleize} | " if vote_location_name.present?
-      display += vote_location_address.titleize
-      display += ", #{vote_location_city}" if vote_location_city.present?
-      display += " (#{vote_location_hours})" if vote_location_hours.present?
-    else
-      nil
-    end
+  def safe_survey_data
+    survey_data.present? ? JSON.parse(survey_data) : DEFAULT_SURVEY_STRUCTURE
   end
 
-  def voting_status_display
-    VOTE_STATUS_TEXT.fetch(voting_status.downcase, voting_status) || "Unknown"
+  def polling_place_display
+    nil # TODO: implement voting location search if possible
+  end
+
+  def voter_registration_status_display
+    return "Unknown" unless voter_registration_status
+    VOTER_REGISTRATION_STATUS_TEXT[voter_registration_status.to_sym]
   end
 
   def phone_number_display
@@ -44,10 +65,6 @@ class Voter < ApplicationRecord
   end
 
   def display_name
-    "#{first_name.capitalize} #{last_name.capitalize}"
-  end
-
-  def household_members
-    Voter.where(household_id: household_id).where.not(sos_id: sos_id)
+    "#{first_name.capitalize} #{last_name.present? ? last_name.capitalize : "" }"
   end
 end
