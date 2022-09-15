@@ -1,0 +1,44 @@
+<section class="hero is-link">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered has-text-centered">
+        <p class="title is-size-1-desktop is-size-2-table is-size-3-mobile is-uppercase has-text-weight-normal mb-0">
+          Imports
+        </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <%= form_tag imports_path, enctype: "multipart/form-data" do %>
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+            <%= label_tag :users_file %>
+            <%= file_field_tag :users_file %>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+            <%= label_tag :voters_file, 'Voters file (called "People" in Reach UI)' %>
+            <%= file_field_tag :voters_file %>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+            <%= label_tag :relationships_file %>
+            <%= file_field_tag :relationships_file %>
+        </div>
+      </div>
+
+      <div class="columns is-centered has-text-centered">
+        <div class="column">
+          <%= submit_tag 'Import', class: 'button is-link' %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+</section>

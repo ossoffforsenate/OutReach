@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'json'
 
 class VoterController < ApplicationController
   SKIP_WARN_THRESHOLDS = Set.new(Rails.configuration.rewards.skip_warnings)
@@ -14,7 +15,7 @@ class VoterController < ApplicationController
   def next
     call_list = current_user.call_list
     voters_seen = current_user.seen_voters
-    next_voter = call_list.find { |v| !voters_seen[v.sos_id.to_s] }
+    next_voter = call_list.find { |v| !voters_seen[v.reach_id] }
 
     if params[:skip] && voter
       record_in_reach(Rails.configuration.reach.responses[:skip])
@@ -41,35 +42,62 @@ class VoterController < ApplicationController
   end
 
   def update
-    if params[:last_call_status]
+    if voter_params[:last_call_status]
       current_user.log_call!
-      if voter.update(last_call_status: params[:last_call_status])
-        record_in_reach(Rails.configuration.reach.responses.to_h.fetch(params[:last_call_status].to_sym))
-        calls_logged = current_user.calls_logged
-        if Rails.configuration.rewards.videos.key?(calls_logged.to_s)
-          flash[:success] = Rails.configuration.rewards.messages[:success]
-          flash[:confetti] = true
-          flash[:video] = REWARD_VIDEOS[calls_logged]
-        elsif calls_logged == 1
-          flash[:success] = Rails.configuration.rewards.messages[:first]
-          flash[:confetti] = true
-        else
-          flash[:success] = 'Call status updated, check out the next voter to call!'
-        end
+      # TODO: un-comment this if we want to sync responses to the Reach API
+      # record_in_reach(Rails.configuration.reach.responses.to_h.fetch(params[:last_call_status].to_sym))
+    end
 
+    if voter.update(voter_params)
+      # if last_call_status is what changed, we want to redirect to the next
+      # voter. Else we just want to reload the previous voter
+      if voter_params[:last_call_status]
+        flash[:success] = 'Contact status updated, check out the next voter to call!'
         redirect_to voter_next_path
       else
-        flash[:danger] = 'Error updating call status, try clicking again!'
-        redirect_to voter_next_path
+        flash[:success] = 'Changes saved successfully'
+        redirect_to @voter
       end
-    elsif params[:is_needs_a_ride_form]
-      needs_a_ride = params[:needs_a_ride] == "1"
-      record_in_reach(Rails.configuration.reach.responses[:needs_a_ride]) if needs_a_ride
-      voter.update(needs_a_ride: needs_a_ride)
+    else
+      flash[:danger] = 'Error recording changes, try again!'
+      redirect_to @voter
     end
   end
 
+  def update_survey
+    survey_data_from_form =
+    {
+        "issues" => {
+          "cares_climate" => params[:cares_about_climate].present? ? "1" : "0",
+          "cares_gun_control" => params[:cares_about_gun_control].present? ? "1" : "0",
+          "cares_healthcare" => params[:cares_about_healthcare].present? ? "1" : "0",
+          "cares_college_affordability" => params[:cares_about_college_affordability].present? ? "1" : "0",
+          "cares_reproductive_rights" => params[:cares_about_reproductive_rights].present? ? "1" : "0",
+          "cares_transparency" => params[:cares_about_transparency].present? ? "1" : "0",
+          "cares_marijuana" => params[:cares_about_marijuana].present? ? "1" : "0",
+          "cares_gender_equity" => params[:cares_about_gender_equity].present? ? "1" : "0",
+          "cares_pay_gap" => params[:cares_about_gender_pay_gap].present? ? "1" : "0",
+          "cares_sexual_assault" => params[:cares_about_sexual_assault].present? ? "1" : "0"
+        },
+        "plan_to_vote_before" => params[:planned_to_vote_before].present? ? "1" : "0",
+        "plan_to_vote_for_paul" => params[:planned_to_vote_for_paul].present? ? "1" : "0"
+    }
+
+    voter = Voter.find(params[:id])
+    if voter.update(survey_data: survey_data_from_form.to_json)
+      flash[:success] = 'Survey data updated'
+    else
+      flash[:danger] = 'Error updating survey responses, try again'
+    end
+
+    redirect_to voter
+  end
+
   private
+
+  def voter_params
+    params.require(:voter).permit(:email, :last_call_status, :voter_registration_status, :notes, :party_id, :vote_plan, :vote_status)
+  end
 
   def migrate_voters_seen
     if current_user && session[:voters_seen].is_a?(Hash)
@@ -84,17 +112,8 @@ class VoterController < ApplicationController
 
   def authorize_and_set_contact
     return unless voter.relationships.where(user: current_user).empty?
-    same_household_voter = voter.
-      household_members.
-      where(sos_id: current_user.relationships.select(:voter_sos_id)).
-      first
-
-    if same_household_voter
-      @same_household_voter = same_household_voter
-    else
-      flash[:danger] = "You don't have access to that voter's details"
-      redirect_back(fallback_location: root_path)
-    end
+    flash[:danger] = "You don't have access to that voter's details"
+    redirect_back(fallback_location: root_path)
   end
 
   def record_in_reach(choice_id)
